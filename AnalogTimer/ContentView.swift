@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var timerCtrl: TimerLogic
-    //@State private var 
-    @FocusState private var isInputFocused: Bool//キーボードOn/Off
-    @AppStorage("TimerDuration") private var Duration: Double = 60
+    @EnvironmentObject var timerCtrl: TimerLogic // タイマー
+    @FocusState private var isInputFocused: Bool //キーボードOn/Off
+    @AppStorage("DurationSec") private var DurationSec: Int = 20 // 残り時間（秒）設定用です
+    @AppStorage("DurationMin") private var DurationMin: Int = 40 // 残り時間（分）
     var body: some View {
         VStack {
-            ZStack(){
+            ZStack(){ // タイマーの輪っか
                 Circle()
                     .stroke(Color.green, style: StrokeStyle(lineWidth:10))
                     .scaledToFit()
@@ -26,28 +26,27 @@ struct ContentView: View {
                     .padding(10)
                     .rotationEffect(.degrees(-90))
             }
-            Text("\(String(format: "%02d", Int(timerCtrl.cleanedCounter / 60))):\(String(format: "%02d", Int(timerCtrl.cleanedCounter) % 60))")
+            Text("\(String(format: "%02d", Int(timerCtrl.cleanedTime / 60))):\(String(format: "%02d", Int(timerCtrl.cleanedTime) % 60))") // 数字でタイマー表示(分:秒)
                 .font(.largeTitle)
                 .padding()
-            TextField("Enter in seconds", value: $Duration, format: .number)
-                .keyboardType(.numberPad)
-                .focused($isInputFocused)
-                .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button(action: {
-                        print("keyboard done! pressed")
-                        isInputFocused = false
-                    }){
-                        Text("Done").bold()
+            
+            HStack { // ピッカー
+                Picker(selection: $DurationMin, label: Text("")){
+                    ForEach(0..<60, id: \.self) { i in
+                        Text("\(i) min").tag(i)
                     }
                 }
-            }
-            HStack(){
+                Picker(selection: $DurationSec, label: Text("")){
+                    ForEach(0..<60, id: \.self) { i in
+                        Text("\(i) sec").tag(i)
+                    }
+                }
+            }.pickerStyle(WheelPickerStyle())
+            HStack(){ // ボタンたち
                 Spacer()
                 Button(action: {
                     if (timerCtrl.timer == nil) {
-                        timerCtrl.startTimer(interval: 0.01) // Limitは分で設定
+                        timerCtrl.startTimer(interval: 0.01) // intervalは秒？
                     } else {
                         timerCtrl.stopTimer()
                     }
@@ -57,18 +56,18 @@ struct ContentView: View {
                 Spacer()
                 Button(action: {
                     timerCtrl.stopTimer()
-                    timerCtrl.cleanedCounter = Duration
-                    timerCtrl.maxValue = Duration
-                    timerCtrl.remainAmount = 1
+                    timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
+                    timerCtrl.maxValue = timerCtrl.cleanedTime
+                    timerCtrl.remainAmount = 1 // リセットしたら満タン
                 }){
-                    Text("Reset Timer")
+                    Text("Reset Timer")//.border(Color.green, width: 2)
                 }
                 Spacer()
             }
         }
         .onAppear(){
-            timerCtrl.cleanedCounter = Duration
-            timerCtrl.maxValue = Duration
+            timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
+            timerCtrl.maxValue = timerCtrl.cleanedTime
         }
     }
 
@@ -79,5 +78,3 @@ struct ContentView: View {
     ContentView()
         .environmentObject(TimerLogic())
 }
-
-
