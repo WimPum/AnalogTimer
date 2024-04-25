@@ -46,7 +46,7 @@ struct ContentView: View {
                 Spacer()
                 Button(action: {
                     if (timerCtrl.timer == nil) {
-                        timerCtrl.startTimer(interval: 0.01) // intervalは秒？
+                        timerCtrl.startTimer(interval: 0.05) // intervalは実質精度コントロール
                     } else {
                         timerCtrl.stopTimer()
                     }

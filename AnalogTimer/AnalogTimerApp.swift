@@ -11,8 +11,9 @@ import SwiftUI
 struct AnalogTimerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(TimerLogic())
+//            ContentView()
+//                .environmentObject(TimerLogic())
+            PreviewSlider()
         }
     }
 }
