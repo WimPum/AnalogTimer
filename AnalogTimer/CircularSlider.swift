@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//Pathで直線かけるらしい
 struct CircularSlider: View {
     @Binding var controlValue: Double // 外部で
     @State private var angleValue: Double = 0.0
@@ -52,6 +53,29 @@ struct CircularSlider: View {
     }
 }
 
+struct ClockTicks: View {
+    let radius: CGFloat
+    let tickCount: Int // 目盛りの総数
+    let tickWidth: CGFloat // 目盛りの太さ
+    let tickLength: CGFloat // 目盛りの長さ
+
+    var body: some View {
+        ZStack(){
+            ForEach(0..<tickCount, id: \.self) { index in
+                let angle = Double(index) / Double(tickCount) * 2 * .pi // 目盛りの角度
+                
+                // 目盛りを描画
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(width: tickWidth, height: tickLength)
+                    .clipShape(Capsule())
+                    .offset(x: 0, y: -radius) // 時計の中心からの距離
+                    .rotationEffect(.radians(angle)) // 目盛りの位置を回転
+            }
+        }
+    }
+}
+
 struct Config { // 位置とか設定
     let color: Color
     let minValue: CGFloat
@@ -76,9 +100,7 @@ struct PreviewSlider: View{
                            config: Config(color: Color.orange,
                                           minValue: 0, maxValue: 60, totalValue: 60,
                                           knobRadius: 15, radius: 160))
-            
-//            Text("\(String(format: "%02d", Int(controlValueInner)))").foregroundStyle(Color.white)
-//                .font(.system(size: CGFloat(100), weight: .light, design: .default))
+            ClockTicks(radius: 120, tickCount: 12, tickWidth: 7, tickLength: 20)
             Text("\(String(format: "%02d", Int(controlValueOuter))):\(String(format: "%02d", Int(controlValueInner)))")
                 .font(.system(size: CGFloat(80), weight: .light, design: .default))
                 .foregroundStyle(Color.white)
@@ -89,4 +111,5 @@ struct PreviewSlider: View{
 
 #Preview {
     PreviewSlider()
+//    ClockTicks(radius: 120, tickCount: 12, tickWidth: 7, tickLength: 20)
 }
