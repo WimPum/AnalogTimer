@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-//Pathで直線かけるらしい
 struct CircularSlider: View {
     @Binding var controlValue: Double // 外部で
+    @State private var currentPos: CGPoint = CGPoint(x: 0, y: 0)
     @State private var angleValue: Double = 0.0
     let config: Config
     var body: some View {
         ZStack{
             VStack{
                 ZStack{
-                    Circle() // 線
-                        .trim(from: 0.0, to: controlValue / config.totalValue)
-                        .stroke(config.color, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                        .rotationEffect(.degrees(-90))
-                        .frame(width: config.radius * 2, height: config.radius * 2)
+//                    Circle() // 線
+//                        .trim(from: 0.0, to: controlValue / config.totalValue)
+//                        .stroke(config.color, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+//                        .rotationEffect(.degrees(-90))
+//                        .frame(width: config.radius * 2, height: config.radius * 2)
                     Circle() // つかむところ
                         .fill(config.color)
                         .frame(width: config.knobRadius * 2, height: config.knobRadius * 2)
@@ -31,16 +31,15 @@ struct CircularSlider: View {
                             .onChanged({value in
                                 changeAngle(location: value.location)
                             }))
+                    clockHands(drawPos: currentPos)
+                        .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                        .fill(config.color)
                 }
-//                Slider(value: $controlValue, in: 0.0...59.9)
-//                    .onChange(of: controlValue, {
-//                        let angleRadian =  controlValue * (.pi * 2) / config.totalValue
-//                        self.angleValue = angleRadian * 180 / .pi
-//                    })
             }.padding(10)
         }
     }
     private func changeAngle(location: CGPoint){ // View内関数
+        print("\(currentPos)")
         // ベクトル化
         let vector = CGVector(dx: location.x, dy: location.y)
         // 角度算出 //なんでベクトルにした？ knobの半径とpaddingを引きます
@@ -50,6 +49,8 @@ struct CircularSlider: View {
         let sliderValue = correctedAngle / (.pi * 2) * config.totalValue// 今の角度/円
         self.controlValue = sliderValue
         self.angleValue = correctedAngle * 180 / .pi
+        currentPos = CGPoint(x: config.radius * cos(correctedAngle - .pi / 2),
+                             y: config.radius * sin(correctedAngle - .pi / 2))
     }
 }
 
@@ -76,6 +77,18 @@ struct ClockTicks: View {
     }
 }
 
+struct clockHands: Shape {
+    let drawPos: CGPoint
+    func path(in rect: CGRect) -> Path {
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        var path = Path()
+        path.move(to: center)
+        path.addLine(to: CGPoint(x: center.x + drawPos.x,
+                                 y: center.y + drawPos.y))
+        return path
+    }
+}
+
 struct Config { // 位置とか設定
     let color: Color
     let minValue: CGFloat
@@ -89,22 +102,25 @@ struct PreviewSlider: View{
     @State private var controlValueInner: Double = 0.0
     @State private var controlValueOuter: Double = 0.0
     var body: some View{
-        ZStack(){
-            LinearGradient(colors: [Color.black, Color.gray], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            CircularSlider(controlValue: $controlValueInner, // second
-                           config: Config(color: Color.green,
-                                          minValue: 0, maxValue: 60, totalValue: 60,
-                                          knobRadius: 15, radius: 120))
-            CircularSlider(controlValue: $controlValueOuter, // minute
-                           config: Config(color: Color.orange,
-                                          minValue: 0, maxValue: 60, totalValue: 60,
-                                          knobRadius: 15, radius: 160))
-            ClockTicks(radius: 120, tickCount: 12, tickWidth: 7, tickLength: 20)
-            Text("\(String(format: "%02d", Int(controlValueOuter))):\(String(format: "%02d", Int(controlValueInner)))")
-                .font(.system(size: CGFloat(80), weight: .light, design: .default))
-                .foregroundStyle(Color.white)
-                .padding()
+        VStack{
+            ZStack(){
+                LinearGradient(colors: [Color.black, Color.gray], startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+                ClockTicks(radius: 170, tickCount: 60, tickWidth: 6, tickLength: 12) // 小さい方
+                ClockTicks(radius: 163, tickCount: 12, tickWidth: 10, tickLength: 30) // 大きい方
+                CircularSlider(controlValue: $controlValueInner, // second
+                               config: Config(color: Color.green,
+                                              minValue: 0, maxValue: 60, totalValue: 60,
+                                              knobRadius: 10, radius: 120))
+                CircularSlider(controlValue: $controlValueOuter, // minute
+                               config: Config(color: Color.orange,
+                                              minValue: 0, maxValue: 60, totalValue: 60,
+                                              knobRadius: 10, radius: 160))
+                Text("\(String(format: "%02d", Int(controlValueInner))):\(String(format: "%02d", Int(controlValueOuter)))")
+                    .font(.system(size: CGFloat(80), weight: .light, design: .default))
+                    .foregroundStyle(Color.white)
+                    .padding()
+            }
         }
     }
 }
