@@ -29,29 +29,57 @@ struct CircularSlider: View {
                         .rotationEffect(Angle.degrees(angleValue))
                         .gesture(DragGesture(minimumDistance: 0.0)
                             .onChanged({value in
-                                changeAngle(location: value.location)
+                                changeAngleSnap(location: value.location)
                             }))
                     clockHands(drawPos: currentPos)
                         .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
                         .fill(config.color)
                 }
+                .onAppear{ // 開いた時点で針を表示
+                    let angle = .pi * 2 / config.maxValue * controlValue
+                    let correctedAngle = angle < 0 ? angle + 2 * .pi : angle // 範囲を0~2piにする
+                    currentPos = CGPoint(x: (config.radius + config.tipLength) * cos(correctedAngle - .pi / 2),
+                                         y: (config.radius + config.tipLength) * sin(correctedAngle - .pi / 2))
+                }
             }.padding(10)
         }
     }
-    private func changeAngle(location: CGPoint){ // View内関数
-        print("\(currentPos)")
+//    private func changeAngle(location: CGPoint){ // View内関数
+//        // ベクトル化
+//        let vector = CGVector(dx: location.x, dy: location.y)
+//        // 角度算出 //なんでベクトルにした？ knobの半径とpaddingを引きます
+//        let angle = atan2(vector.dy - (config.knobRadius + 10), 
+//                          vector.dx - (config.knobRadius + 10)) + .pi / 2 // .pi/2は90度
+//        let correctedAngle = angle < 0 ? angle + 2 * .pi : angle // 範囲を0~2piにする radian
+//        let sliderValue = correctedAngle / (.pi * 2) * config.maxValue// 今の角度/円
+//        self.controlValue = sliderValue
+//        self.angleValue = correctedAngle * 180 / .pi
+//        currentPos = CGPoint(x: (config.radius + config.tipLength) * cos(correctedAngle - .pi / 2),
+//                             y: (config.radius + config.tipLength) * sin(correctedAngle - .pi / 2))
+//    }
+    private func changeAngleSnap(location: CGPoint){ // View内関数
         // ベクトル化
         let vector = CGVector(dx: location.x, dy: location.y)
         // 角度算出 //なんでベクトルにした？ knobの半径とpaddingを引きます
-        let angle = atan2(vector.dy - (config.knobRadius + 10), 
+        let angle = atan2(vector.dy - (config.knobRadius + 10),
                           vector.dx - (config.knobRadius + 10)) + .pi / 2 // .pi/2は90度
-        let correctedAngle = angle < 0 ? angle + 2 * .pi : angle
-        let sliderValue = correctedAngle / (.pi * 2) * config.totalValue// 今の角度/円
+        let snappedAngle = angleSnapper(angle: angle, snapAmount: config.snapCount) // スナップ先の角度
+        let correctedAngle = snappedAngle < 0 ? snappedAngle + 2 * .pi : snappedAngle // 範囲を0~2piにする radian
+        let sliderValue = round(correctedAngle / (.pi * 2) * config.maxValue)// 今の角度/円
+        //print("sliderVal:\(sliderValue)")
         self.controlValue = sliderValue
         self.angleValue = correctedAngle * 180 / .pi
-        currentPos = CGPoint(x: config.radius * cos(correctedAngle - .pi / 2),
-                             y: config.radius * sin(correctedAngle - .pi / 2))
+        currentPos = CGPoint(x: (config.radius + config.tipLength) * cos(correctedAngle - .pi / 2),
+                             y: (config.radius + config.tipLength) * sin(correctedAngle - .pi / 2))
     }
+}
+
+func angleSnapper(angle: CGFloat, snapAmount: Int) -> CGFloat{ // 直したい角度と、スナップ点の数
+    let angleDeg = angle / .pi * 180 // deg変換
+    let unitAngle = CGFloat(360 / Float(snapAmount)) // やはりDegreesで OK
+    let returnAngle = round(angleDeg / unitAngle) * unitAngle
+    //print("angleDeg:\(angleDeg), unitangle:\(unitAngle), return:\(returnAngle), rad\(returnAngle * .pi / 180)")
+    return returnAngle * .pi / 180
 }
 
 struct ClockTicks: View {
@@ -93,36 +121,10 @@ struct Config { // 位置とか設定
     let color: Color
     let minValue: CGFloat
     let maxValue: CGFloat
-    let totalValue: CGFloat // maxValue???
+    let snapCount: Int // snapする数
     let knobRadius: CGFloat // 半径 あとで2倍する
     let radius: CGFloat
-}
-
-struct PreviewSlider: View{
-    @State private var controlValueInner: Double = 0.0
-    @State private var controlValueOuter: Double = 0.0
-    var body: some View{
-        VStack{
-            ZStack(){
-                LinearGradient(colors: [Color.black, Color.gray], startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
-                ClockTicks(radius: 170, tickCount: 60, tickWidth: 6, tickLength: 12) // 小さい方
-                ClockTicks(radius: 163, tickCount: 12, tickWidth: 10, tickLength: 30) // 大きい方
-                CircularSlider(controlValue: $controlValueInner, // second
-                               config: Config(color: Color.green,
-                                              minValue: 0, maxValue: 60, totalValue: 60,
-                                              knobRadius: 10, radius: 120))
-                CircularSlider(controlValue: $controlValueOuter, // minute
-                               config: Config(color: Color.orange,
-                                              minValue: 0, maxValue: 60, totalValue: 60,
-                                              knobRadius: 10, radius: 160))
-                Text("\(String(format: "%02d", Int(controlValueInner))):\(String(format: "%02d", Int(controlValueOuter)))")
-                    .font(.system(size: CGFloat(80), weight: .light, design: .default))
-                    .foregroundStyle(Color.white)
-                    .padding()
-            }
-        }
-    }
+    let tipLength: CGFloat // 針の先端の長さ
 }
 
 #Preview {
