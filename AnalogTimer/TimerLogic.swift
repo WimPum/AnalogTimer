@@ -14,7 +14,8 @@ class TimerLogic: ObservableObject{
     @Published var timer: AnyCancellable? // 実際のタイマー
     
     var maxValue = 0.0 // 設定された時間を受け取ります
-    var remainTime = 0.0 // こっちが変更されて、cleanedTimeは綺麗になっている方
+    var remainTime: Double = 0.0 // こっちが変更されて、cleanedTimeは綺麗になっている方
+    // remainTimeは外からアクセスして編集します
     
     func startTimer(interval: Double) { // limitはminuteで設定する
         // 呼び出し時の処理

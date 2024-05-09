@@ -12,7 +12,6 @@
 		B15D3AF02BC1EFBD00118FAB /* AnalogTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */; };
 		B15D3AF12BC1EFBD00118FAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */; };
 		B15D3AF22BC1EFBD00118FAB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */; };
-		B15D3AF32BC1EFBD00118FAB /* RadialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AEB2BC1EFBD00118FAB /* RadialView.swift */; };
 		B15D3AF52BC1EFBD00118FAB /* TimerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */; };
 		B18AB49D2BDD5D88006694A6 /* PreviewSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18AB49C2BDD5D88006694A6 /* PreviewSlider.swift */; };
 /* End PBXBuildFile section */
@@ -24,7 +23,6 @@
 		B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalogTimerApp.swift; sourceTree = "<group>"; };
 		B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		B15D3AEB2BC1EFBD00118FAB /* RadialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadialView.swift; sourceTree = "<group>"; };
 		B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerLogic.swift; sourceTree = "<group>"; };
 		B18AB49C2BDD5D88006694A6 /* PreviewSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSlider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,7 +69,6 @@
 				B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */,
 				B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */,
 				B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */,
-				B15D3AEB2BC1EFBD00118FAB /* RadialView.swift */,
 				B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */,
 				B1362D992BD32737003976F9 /* CircularSlider.swift */,
 				B18AB49C2BDD5D88006694A6 /* PreviewSlider.swift */,
@@ -154,7 +151,6 @@
 				B15D3AF02BC1EFBD00118FAB /* AnalogTimerApp.swift in Sources */,
 				B18AB49D2BDD5D88006694A6 /* PreviewSlider.swift in Sources */,
 				B1362D9A2BD32737003976F9 /* CircularSlider.swift in Sources */,
-				B15D3AF32BC1EFBD00118FAB /* RadialView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

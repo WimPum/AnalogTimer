@@ -13,7 +13,7 @@ struct AnalogTimerApp: App {
         WindowGroup {
 //            ContentView()
 //                .environmentObject(TimerLogic())
-            PreviewSlider()
+            PreviewClock()
         }
     }
 }
