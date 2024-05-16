@@ -41,6 +41,9 @@ struct ContentView: View {
         
         let angle: Double = center - (radians / (2.0 * .pi))
         
+        print("CENTER: \(self.width / 2), \(self.height / 2)")
+        print("TOUCHED \(vector)")
+        
         // アニメーションをつけているが、つけなくてももちろん問題ない
         withAnimation(Animation.linear(duration: 0.1)){
             self.angle = self.endAngle < angle ? self.endAngle : angle
