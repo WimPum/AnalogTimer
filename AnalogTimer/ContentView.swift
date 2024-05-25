@@ -1,78 +1,48 @@
+//
+//  ContentView.swift
+//  AnalogTimer
+//
+//  Created by 虎澤謙 on 2024/03/31.
+//
+
 import SwiftUI
 
 struct ContentView: View {
-    @State var angle: Double = 0.5
-    
-    let width: CGFloat = 250
-    let height: CGFloat = 250
-
-    let beginAngle: Double = 0.0
-    let endAngle: Double = 1.0
-    let minimumValue: Double = 0
-    let maximumValue: Double = 100
-    
-    var value: Int {
-        let percent = (self.angle - self.beginAngle) / (self.endAngle - self.beginAngle)
-                
-        var value = (maximumValue - minimumValue) * percent + minimumValue
-        
-        if value < minimumValue {
-            value = minimumValue
-        }
-        
-        if maximumValue < value {
-            value = maximumValue
-        }
-        
-        return Int(value)
-    }
-        
-    func onChanged(value: DragGesture.Value) {
-        let vector = CGVector(dx: value.location.x, dy: value.location.y)
-        
-        // 中央からタップ位置までの距離
-        let distanceX: Double = self.width  / 2 - vector.dx
-        let distanceY: Double = self.height / 2 - vector.dy
-
-        // Circle()の中央からタップ位置のラジアンアークタンジェント2を求める
-        let radians: Double = atan2(distanceX, distanceY)
-        
-        let center: Double = (self.endAngle + self.beginAngle) / 2.0
-        
-        let angle: Double = center - (radians / (2.0 * .pi))
-        
-        print("CENTER: \(self.width / 2), \(self.height / 2)")
-        print("TOUCHED \(vector)")
-        
-        // アニメーションをつけているが、つけなくてももちろん問題ない
-        withAnimation(Animation.linear(duration: 0.1)){
-            self.angle = self.endAngle < angle ? self.endAngle : angle
-        }
-    }
-    
+    @EnvironmentObject var timerCtrl: TimerLogic // タイマー
+    @FocusState private var isInputFocused: Bool //キーボードOn/Off
     var body: some View {
         ZStack {
-            Text(String(self.value))
-            Circle()
-                .trim(from: self.beginAngle, to: self.endAngle)
-                .stroke(Color.black, lineWidth: 20)
-                .frame(width: self.width, height: self.height)
-                .rotationEffect(.init(degrees: 90))
-                .gesture(
-                    DragGesture().onChanged(self.onChanged(value:))
+            LinearGradient(colors: [Color.black, Color.gray], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            VStack(){ // タイマーの輪っか
+                ClockView(minControlValue: $timerCtrl.minRemainTime, secControlValue: $timerCtrl.secRemainTime)
+                    .padding(5)
+                Spacer().frame(height: 50)
+                Button(action: {
+                    if (timerCtrl.timer == nil) {
+                        timerCtrl.startTimer(interval: 0.05) // intervalは実質精度コントロール
+                    } else {
+                        timerCtrl.stopTimer()
+                    }
+                }){
+                    Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
+                }
+                .frame(width: 130, height: 60)
+                .foregroundStyle(.white)
+                .background(
+                    RoundedRectangle(cornerRadius: CGFloat(12))
+                        .foregroundStyle(.blue)
                 )
-            Circle()
-                .trim(from: self.beginAngle, to: self.angle)
-                .stroke(Color.orange, lineWidth: 20)
-                .frame(width: self.width, height: self.height)
-                .rotationEffect(.init(degrees: 90))
-                .gesture(
-                    DragGesture().onChanged(self.onChanged(value:))
-                )
+            }
         }
+//        .onAppear(){
+////            timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
+////            timerCtrl.maxValue = timerCtrl.cleanedTime
+//        }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(TimerLogic())
 }

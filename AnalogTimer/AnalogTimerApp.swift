@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct AnalogTimerApp: App {
+    @StateObject var timers = TimerLogic()
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environmentObject(TimerLogic())
-            PreviewClock()
+            ContentView()
+                .environmentObject(timers)
         }
     }
 }

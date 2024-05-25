@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ClockFace: View{ // 実験用View
+struct ClockView: View{ // 実験用View
     // main
-    @State private var minControlValue: Double = 0.0 // Minute:Secondの順番を守る
-    @State private var secControlValue: Double = 0.0
+    @Binding var minControlValue: Double // Minute:Secondの順番を守る
+    @Binding var secControlValue: Double
     
     // clock revolution detector
     @State private var secPreviousAngle: Double? = 0.0 // ドラッグ開始時の角度を保持する
@@ -88,7 +88,6 @@ struct ClockFace: View{ // 実験用View
                                 //minControlValue = round(minAngleValue / 360 * minConfig.maxValue) // 今の角度/円
                                 minControlValue = angle2value(config: minConfig, degAngle: minAngleValue)
                                 print("\(minAngleValue), \(secAngleValue), \(angle)")
-//
                             }
                             secPreviousAngle = angle
                         })
@@ -106,18 +105,4 @@ struct ClockFace: View{ // 実験用View
                 .frame(width: 8, height: 8)
         }
     }
-}
-
-struct PreviewClock: View {
-    var body: some View {
-        ZStack(){
-            LinearGradient(colors: [.black, .gray], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            ClockFace()
-        }
-    }
-}
-
-#Preview {
-    PreviewClock()
 }
