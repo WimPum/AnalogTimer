@@ -11,6 +11,7 @@ struct ClockView: View{ // 実験用View
     // main
     @Binding var minControlValue: Double // Minute:Secondの順番を守る
     @Binding var secControlValue: Double
+    var isTimerRunning: Bool
     
     // clock revolution detector
     @State private var secPreviousAngle: Double? = 0.0 // ドラッグ開始時の角度を保持する
@@ -37,26 +38,29 @@ struct ClockView: View{ // 実験用View
             
             CircularSlider(controlValue: $minControlValue, // Minute 秒針とできるだけ共通で実装
                            angleValue: $minAngleValue,
+                           isTimerRunning: isTimerRunning,
                            config: minConfig)
                 .rotationEffect(Angle(degrees: 6 * (secControlValue / 60))) // 秒針が回ったらこっちも回転
                 .gesture(
                     DragGesture(minimumDistance: 0.0)
                         .onChanged({value in
-                            let angle = angleSnapper(degAngle: returnDegAngle(config: minConfig, location: value.location),
-                                                     snapAmount: 60)
-                            if let previousAngle = minPreviousAngle{
-                                var angleChange = angle - previousAngle // 変わった角度の大きさ
-                                
-                                // formatter
-                                if angleChange > 180{ //
-                                    angleChange -= 360
-                                } else if angleChange < -180{
-                                    angleChange += 360
+                            if isTimerRunning == false{
+                                let angle = angleSnapper(degAngle: returnDegAngle(config: minConfig, location: value.location),
+                                                         snapAmount: 60)
+                                if let previousAngle = minPreviousAngle{
+                                    var angleChange = angle - previousAngle // 変わった角度の大きさ
+                                    
+                                    // formatter
+                                    if angleChange > 180{ //
+                                        angleChange -= 360
+                                    } else if angleChange < -180{
+                                        angleChange += 360
+                                    }
+                                    minAngleValue += angleChange
+                                    minControlValue = round(angle / 360 * minConfig.maxValue)// 今の角度/円 snapped
                                 }
-                                minAngleValue += angleChange
-                                minControlValue = round(angle / 360 * minConfig.maxValue)// 今の角度/円 snapped
+                                minPreviousAngle = angle
                             }
-                            minPreviousAngle = angle
                         })
                         .onEnded { _ in
                             minPreviousAngle = nil
@@ -65,32 +69,36 @@ struct ClockView: View{ // 実験用View
 
             CircularSlider(controlValue: $secControlValue, // Second
                            angleValue: $secAngleValue,
+                           isTimerRunning: isTimerRunning,
                            config: secConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.0)
                         .onChanged({value in
-                            let angle = angleSnapper(degAngle: returnDegAngle(config: secConfig, location: value.location),
-                                                     snapAmount: 60)
-                            if let previousAngle = secPreviousAngle{
-                                var angleChange = angle - previousAngle // 変わった角度の大きさ
-                                
-                                // formatter
-                                if angleChange > 180{ //
-                                    angleChange -= 360
-                                } else if angleChange < -180{
-                                    angleChange += 360
+                            if isTimerRunning == false{
+                                let angle = angleSnapper(degAngle: returnDegAngle(config: secConfig, location: value.location),
+                                                         snapAmount: 60)
+                                if let previousAngle = secPreviousAngle{
+                                    var angleChange = angle - previousAngle // 変わった角度の大きさ
+                                    
+                                    // formatter
+                                    if angleChange > 180{ //
+                                        angleChange -= 360
+                                    } else if angleChange < -180{
+                                        angleChange += 360
+                                    }
+                                    secAngleValue += angleChange
+                                    minAngleValue += floor(self.secAngleValue / 360) * 6
+                                    minAngleValue = angleFormatter(degAngle: minAngleValue)
+                                    
+                                    secControlValue = round(angle / 360 * secConfig.maxValue)// 今の角度/円 snapped
+                                    //minControlValue = round(minAngleValue / 360 * minConfig.maxValue) // 今の角度/円
+                                    minControlValue = angle2value(config: minConfig, degAngle: minAngleValue)
+                                    print("\(minAngleValue), \(secAngleValue), \(angle)")
                                 }
-                                secAngleValue += angleChange
-                                minAngleValue += floor(self.secAngleValue / 360) * 6
-                                minAngleValue = angleFormatter(degAngle: minAngleValue)
-
-                                secControlValue = round(angle / 360 * secConfig.maxValue)// 今の角度/円 snapped
-                                //minControlValue = round(minAngleValue / 360 * minConfig.maxValue) // 今の角度/円
-                                minControlValue = angle2value(config: minConfig, degAngle: minAngleValue)
-                                print("\(minAngleValue), \(secAngleValue), \(angle)")
+                                secPreviousAngle = angle
                             }
-                            secPreviousAngle = angle
                         })
+                    
                         .onEnded { _ in
                             secPreviousAngle = nil
                         }

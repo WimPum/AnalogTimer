@@ -5,7 +5,7 @@
 //  Created by 虎澤謙 on 2024/05/25.
 //
 
-import Foundation
+import UIKit
 
 
 func returnDegAngle(config: Config, location: CGPoint) -> CGFloat{
@@ -43,4 +43,27 @@ func angleSnapper(degAngle: CGFloat, snapAmount: Int) -> CGFloat{ // 直した�
 
 func rad2deg (radAngle: CGFloat) -> CGFloat{
     return radAngle * 180 / .pi
+}
+
+// 触覚を発生させます
+func giveHaptics(impactType: String, ifActivate: Bool){
+    if ifActivate == false{
+        return
+    }
+    else if impactType == "soft"{
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()//Haptic Feedback
+        //AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) {} // AudioToolbox
+    }
+    else if impactType == "medium"{
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+    }
+    else if impactType == "heavy"{
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+    }
+    else if impactType == "rigid"{
+        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+    }
+    else if impactType == "light"{
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+    }
 }

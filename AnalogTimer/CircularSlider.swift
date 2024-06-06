@@ -10,6 +10,7 @@ import SwiftUI
 struct CircularSlider: View {
     @Binding var controlValue: Double   // 外部の値を編集
     @Binding var angleValue: Double     // 今の角度
+    var isTimerRunning: Bool
     let config: Config
     
     var body: some View {
@@ -31,6 +32,9 @@ struct CircularSlider: View {
         }
         .onChange(of: controlValue) { _ in
             updateAngle()
+//            if isTimerRunning == false{
+//                giveHaptics(impactType: "soft", ifActivate: true)
+//            }
         }
         
     }

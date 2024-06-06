@@ -33,7 +33,7 @@ class TimerLogic: ObservableObject{
                     self.stopTimer()
                 }
                 else if self.secRemainTime < 0{
-                    self.secRemainTime = 60
+                    self.secRemainTime = 60 - interval
                     self.minRemainTime -= 1
                 }
             }))
