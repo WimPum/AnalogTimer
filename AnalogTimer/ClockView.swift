@@ -45,8 +45,9 @@ struct ClockView: View{ // 実験用View
                     DragGesture(minimumDistance: 0.0)
                         .onChanged({value in
                             if isTimerRunning == false{
-                                let angle = angleSnapper(degAngle: returnDegAngle(config: minConfig, location: value.location),
+                                var angle = angleSnapper(degAngle: returnDegAngle(config: minConfig, location: value.location),
                                                          snapAmount: 60)
+                                angle -= 6 * (secControlValue / 60) // 秒針による分針の回転を打ち消す
                                 if let previousAngle = minPreviousAngle{
                                     var angleChange = angle - previousAngle // 変わった角度の大きさ
                                     
