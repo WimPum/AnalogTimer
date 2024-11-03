@@ -7,18 +7,20 @@
 
 import SwiftUI
 
-struct CircularSlider: View {
-    @Binding var controlValue: Double   // 外部の値を編集
-    @Binding var angleValue: Double     // 今の角度
-    var isTimerRunning: Bool
+//MARK: Views
+
+// ここでやることは最低限にする
+// angleValueは外から変更できるようにBindingにしてある
+struct ClockHand: View {
+    @Binding var angleValue: CGFloat    // 今の角度
     let config: Config
-    
     var body: some View {
         ZStack{
-            Capsule() // つかむところ
+            // つかむところ
+            Capsule()
                 .fill(config.color)
                 .frame(width: config.knobWidth, height: config.knobLength)
-                .padding(10) // paddingがあると掴みやすい
+                .padding(15) // paddingがあると掴みやすい
                 .offset(y: -(config.knobLength / 2 + config.tailLength)) // 初期状態
             ClockTail(length: config.tailLength)
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round))
@@ -26,24 +28,19 @@ struct CircularSlider: View {
         }
         .frame(width: (config.tailLength + config.knobLength) * 2,
                height: (config.tailLength + config.knobLength) * 2)
-        .rotationEffect(Angle.degrees(angleValue))
-        .onAppear{ // 開いた時点で針を表示
-            updateAngle()
-        }
-        .onChange(of: controlValue) { _ in
-            updateAngle()
-//            if isTimerRunning == false{
-//                giveHaptics(impactType: "soft", ifActivate: true)
-//            }
-        }
-        
+        .rotationEffect(Angle.degrees(angleValue/config.divisor)) // 回転を遅くする
     }
-    
-    // 値が変わったりした時角度を更新
-    private func updateAngle(){ // degrees
-        let angle = 360 / config.maxValue * controlValue
-        let correctedAngle = angleFormatter(degAngle: angle)
-        angleValue = correctedAngle  // 表示された時に現在の値を反映させる
+}
+
+struct ClockTail: Shape {
+    let length: CGFloat
+    func path(in rect: CGRect) -> Path {
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        var path = Path()
+        path.move(to: center)
+        path.addLine(to: CGPoint(x: center.x,
+                                 y: center.y - length))
+        return path
     }
 }
 
@@ -70,29 +67,11 @@ struct ClockTicks: View {
     }
 }
 
-struct ClockTail: Shape {
-    let length: CGFloat
-    func path(in rect: CGRect) -> Path {
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        var path = Path()
-        path.move(to: center)
-        path.addLine(to: CGPoint(x: center.x,
-                                 y: center.y - length))
-        return path
-    }
-}
-
 struct Config { // 位置とか設定
     let color: Color
-    let minValue: CGFloat
-    let maxValue: CGFloat
+    let divisor: CGFloat // 分針は回転が60倍遅くなる だから60で割る
     let snapCount: Int // snapする数
     let knobLength: CGFloat // 長さ
     let knobWidth: CGFloat // 半径 あとで2倍する
     let tailLength: CGFloat // 針の先端の長さ
 }
-
-//#Preview {
-//    PreviewClock()
-//}
-
