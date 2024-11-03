@@ -9,17 +9,15 @@ import Foundation
 import Combine
 
 class TimerLogic: ObservableObject{
-    @Published var remainAmount: CGFloat = 1.0 // 0.0 ~ 1.0 残りの割合 リング用⚪︎
     @Published var timer: AnyCancellable? // 実際のタイマー
-    @Published var minRemainTime: Double = 0.0
-    @Published var secRemainTime: Double = 0.0
+    @Published var angleValue: CGFloat = 0.0
     // remainTimeは外からアクセスして編集します
     
     func startTimer(interval: Double) { // limitはminuteで設定する
         // 呼び出し時の処理
         if let _timer = timer{ // もし開始時にタイマーが存在したら消す
             _timer.cancel()
-        } else if self.minRemainTime <= 0 && self.secRemainTime <= 0{ // 開始時に残り時間0だったら
+        } else if self.angleValue <= 0{ // 開始時に残り時間0だったら
             return
         }
         // タイマー宣言
@@ -27,14 +25,9 @@ class TimerLogic: ObservableObject{
             .autoconnect()
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: ({ _ in
-                self.secRemainTime -= interval // タイマーを減らす箇所
-                if self.minRemainTime <= 0 && self.secRemainTime <= 0 { // タイマー終了
-                    //self.remainAmount = 0.0
+                self.angleValue -= interval * 6 // タイマーを減らす箇所 6°で１秒だから
+                if self.angleValue <= 0 { // タイマー終了
                     self.stopTimer()
-                }
-                else if self.secRemainTime < 0{
-                    self.secRemainTime = 60 - interval
-                    self.minRemainTime -= 1
                 }
             }))
     }

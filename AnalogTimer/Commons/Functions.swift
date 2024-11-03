@@ -23,6 +23,13 @@ func returnDegAngle(config: Config, location: CGPoint) -> CGFloat{
     return angleFormatter360(degAngle: rad2deg(radAngle: angle))
 }
 
+//// 角度に対して値を返す
+//func angle2value(config: Config, degAngle: CGFloat) -> Double{
+//    // angleが360°のうちどれくらい？で値を決める
+//    // 360°の時はどうなる？
+//    return (config.maxValue - config.minValue) * degAngle / 360 + config.minValue
+//}
+
 // ラジアン-度数法変換
 func rad2deg (radAngle: CGFloat) -> CGFloat{
     return radAngle * 180 / .pi

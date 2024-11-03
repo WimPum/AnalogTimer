@@ -9,13 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var timerCtrl: TimerLogic // タイマー
-    
+    @State private var isSnappy: Bool = false
     var body: some View {
         ZStack {
             LinearGradient(colors: [Color.black, Color.gray], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             VStack(){ // タイマーの輪っか
-                ClockView(minControlValue: $timerCtrl.minRemainTime, secControlValue: $timerCtrl.secRemainTime, isTimerRunning: (timerCtrl.timer != nil))
+                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: isSnappy, isTimerRunning: false) // (timerCtrl.timer != nil)
                     .padding(5)
                 Spacer().frame(height: 50)
                 Button(action: {
@@ -33,6 +33,7 @@ struct ContentView: View {
                                 .foregroundStyle(.blue)
                         )
                 }
+                Toggle("Snappy Snappy", isOn: $isSnappy).padding()
             }
         }
 //        .onAppear(){
