@@ -19,6 +19,15 @@ extension View {
         }
     }
     
+    func sheetDetents() -> some View {
+        if #available(iOS 16.0, *) {//iOS16以降ならこっちでリスト透明化
+            return self.presentationDetents([.medium])
+        } else {
+//            UITableView.appearance().backgroundColor = UIColor(.clear)
+            return self
+        }
+    }
+    
     //色とかフォント スタイル
     func fontLight(size: Int) -> some View {
         self

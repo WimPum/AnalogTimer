@@ -7,25 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B1362D9A2BD32737003976F9 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1362D992BD32737003976F9 /* CommonViews.swift */; };
 		B15D3AEF2BC1EFBD00118FAB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B15D3AE62BC1EFBD00118FAB /* Preview Assets.xcassets */; };
 		B15D3AF02BC1EFBD00118FAB /* AnalogTimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */; };
 		B15D3AF12BC1EFBD00118FAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */; };
 		B15D3AF22BC1EFBD00118FAB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */; };
 		B15D3AF52BC1EFBD00118FAB /* TimerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */; };
-		B18AB49D2BDD5D88006694A6 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18AB49C2BDD5D88006694A6 /* ClockView.swift */; };
+		B1A326DA2CD90AAD00D3C934 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326D62CD90AAD00D3C934 /* AboutView.swift */; };
+		B1A326DB2CD90AAD00D3C934 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326D72CD90AAD00D3C934 /* SettingsStore.swift */; };
+		B1A326DC2CD90AAD00D3C934 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326D82CD90AAD00D3C934 /* SettingsView.swift */; };
+		B1A326E02CD90AB400D3C934 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326DD2CD90AB400D3C934 /* ClockView.swift */; };
+		B1A326E12CD90AB400D3C934 /* CommonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326DE2CD90AB400D3C934 /* CommonViews.swift */; };
+		B1A326E32CD90DC100D3C934 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E22CD90DC100D3C934 /* Extensions.swift */; };
+		B1A326E82CD9104900D3C934 /* IntSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E42CD9104900D3C934 /* IntSlider.swift */; };
+		B1A326E92CD9104900D3C934 /* limitedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E52CD9104900D3C934 /* limitedTextField.swift */; };
+		B1A326EA2CD9104900D3C934 /* AnimGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E62CD9104900D3C934 /* AnimGradient.swift */; };
 		B1E876E22C01AFD200810D85 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E876E12C01AFD100810D85 /* Functions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B1362D992BD32737003976F9 /* CommonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
 		B15D3AD52BC1EF6100118FAB /* AnalogTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnalogTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B15D3AE62BC1EFBD00118FAB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalogTimerApp.swift; sourceTree = "<group>"; };
 		B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerLogic.swift; sourceTree = "<group>"; };
-		B18AB49C2BDD5D88006694A6 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
+		B1A326D62CD90AAD00D3C934 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		B1A326D72CD90AAD00D3C934 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		B1A326D82CD90AAD00D3C934 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B1A326DD2CD90AB400D3C934 /* ClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
+		B1A326DE2CD90AB400D3C934 /* CommonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonViews.swift; sourceTree = "<group>"; };
+		B1A326E22CD90DC100D3C934 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		B1A326E42CD9104900D3C934 /* IntSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntSlider.swift; sourceTree = "<group>"; };
+		B1A326E52CD9104900D3C934 /* limitedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = limitedTextField.swift; sourceTree = "<group>"; };
+		B1A326E62CD9104900D3C934 /* AnimGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimGradient.swift; sourceTree = "<group>"; };
 		B1E876E12C01AFD100810D85 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,16 +81,55 @@
 		B15D3AEE2BC1EFBD00118FAB /* AnalogTimer */ = {
 			isa = PBXGroup;
 			children = (
-				B15D3AE72BC1EFBD00118FAB /* Preview Content */,
-				B1E876E12C01AFD100810D85 /* Functions.swift */,
-				B1362D992BD32737003976F9 /* CommonViews.swift */,
+				B1A326D92CD90AAD00D3C934 /* Settings */,
+				B1A326DF2CD90AB400D3C934 /* View */,
+				B1A326CC2CD9078400D3C934 /* Commons */,
 				B15D3AED2BC1EFBD00118FAB /* TimerLogic.swift */,
-				B18AB49C2BDD5D88006694A6 /* ClockView.swift */,
 				B15D3AEA2BC1EFBD00118FAB /* ContentView.swift */,
 				B15D3AE82BC1EFBD00118FAB /* AnalogTimerApp.swift */,
 				B15D3AE92BC1EFBD00118FAB /* Assets.xcassets */,
+				B15D3AE72BC1EFBD00118FAB /* Preview Content */,
 			);
 			path = AnalogTimer;
+			sourceTree = "<group>";
+		};
+		B1A326CC2CD9078400D3C934 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				B1A326E22CD90DC100D3C934 /* Extensions.swift */,
+				B1E876E12C01AFD100810D85 /* Functions.swift */,
+			);
+			path = Commons;
+			sourceTree = "<group>";
+		};
+		B1A326D92CD90AAD00D3C934 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B1A326D62CD90AAD00D3C934 /* AboutView.swift */,
+				B1A326D72CD90AAD00D3C934 /* SettingsStore.swift */,
+				B1A326D82CD90AAD00D3C934 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		B1A326DF2CD90AB400D3C934 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B1A326E72CD9104900D3C934 /* CustomElement */,
+				B1A326DD2CD90AB400D3C934 /* ClockView.swift */,
+				B1A326DE2CD90AB400D3C934 /* CommonViews.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B1A326E72CD9104900D3C934 /* CustomElement */ = {
+			isa = PBXGroup;
+			children = (
+				B1A326E42CD9104900D3C934 /* IntSlider.swift */,
+				B1A326E52CD9104900D3C934 /* limitedTextField.swift */,
+				B1A326E62CD9104900D3C934 /* AnimGradient.swift */,
+			);
+			path = CustomElement;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,11 +202,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1A326E82CD9104900D3C934 /* IntSlider.swift in Sources */,
+				B1A326E92CD9104900D3C934 /* limitedTextField.swift in Sources */,
+				B1A326EA2CD9104900D3C934 /* AnimGradient.swift in Sources */,
 				B15D3AF52BC1EFBD00118FAB /* TimerLogic.swift in Sources */,
 				B15D3AF22BC1EFBD00118FAB /* ContentView.swift in Sources */,
 				B15D3AF02BC1EFBD00118FAB /* AnalogTimerApp.swift in Sources */,
-				B18AB49D2BDD5D88006694A6 /* ClockView.swift in Sources */,
-				B1362D9A2BD32737003976F9 /* CommonViews.swift in Sources */,
+				B1A326DA2CD90AAD00D3C934 /* AboutView.swift in Sources */,
+				B1A326E02CD90AB400D3C934 /* ClockView.swift in Sources */,
+				B1A326E32CD90DC100D3C934 /* Extensions.swift in Sources */,
+				B1A326E12CD90AB400D3C934 /* CommonViews.swift in Sources */,
+				B1A326DB2CD90AAD00D3C934 /* SettingsStore.swift in Sources */,
+				B1A326DC2CD90AAD00D3C934 /* SettingsView.swift in Sources */,
 				B1E876E22C01AFD200810D85 /* Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = "0.1-alpha";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ulyssas.AnalogTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -340,7 +400,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = "0.1-alpha";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ulyssas.AnalogTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

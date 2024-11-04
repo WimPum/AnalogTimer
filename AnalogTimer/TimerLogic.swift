@@ -11,7 +11,9 @@ import Combine
 class TimerLogic: ObservableObject{
     @Published var timer: AnyCancellable? // 実際のタイマー
     @Published var angleValue: CGFloat = 0.0
-    // remainTimeは外からアクセスして編集します
+    var startTime: Date = Date()
+    var endTime: Date = Date()
+//    var currentTime: Date = Date()
     
     func startTimer(interval: Double) { // limitはminuteで設定する
         // 呼び出し時の処理
@@ -20,12 +22,16 @@ class TimerLogic: ObservableObject{
         } else if self.angleValue <= 0{ // 開始時に残り時間0だったら
             return
         }
+        startTime = Date.now
+        endTime = startTime.addingTimeInterval(angleValue/6)
         // タイマー宣言
         timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
             .autoconnect()
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: ({ _ in
-                self.angleValue -= interval * 6 // タイマーを減らす箇所 6°で１秒だから
+            .sink(receiveValue: ({ value in
+//                self.currentTime = value
+//                self.angleValue -= interval * 6 // タイマーを減らす箇所 6°で１秒だから
+                self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 6で割ったりかけたりしすぎ？
                 if self.angleValue <= 0 { // タイマー終了
                     self.stopTimer()
                 }
