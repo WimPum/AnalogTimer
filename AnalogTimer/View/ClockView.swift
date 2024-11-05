@@ -9,15 +9,20 @@ import SwiftUI
 
 // ClockView
 struct ClockView: View{
-    // Values
+    @EnvironmentObject var configStore: SettingsStore // EnvironmentObjになった設定
+    
+    // values
     @Binding var angleValue: CGFloat     // 角度の値 360°を超えていく 1秒は6° つまりangleValue/6=seconds
     @State private var previousAngle: CGFloat? = 0.0    // ドラッグ開始時の角度を保持する すごいやつ
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
-    var isSnappy: Bool = false           // スナップ有無
+    let secConfig = Config(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 9, tailLength: 23)
+    let minConfig = Config(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 11, tailLength: 23)
+    
+    // settings
+    var isSnappy: Bool          // スナップ有無
     var isTimerRunning: Bool
-    let secConfig = Config(color: .orange, divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 9, tailLength: 23) // color_mutable???
-    let minConfig = Config(color: .green, divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 11, tailLength: 23)
+
     var body: some View{
         ZStack(){
             Text("\(String(format: "%02d",Int(angleValue/360))):\(String(format: "%02d",Int((angleValue/6).truncatingRemainder(dividingBy: 60))))")
@@ -27,7 +32,7 @@ struct ClockView: View{
             ClockTicks(radius: 170, tickCount: 60, tickWidth: 6, tickLength: 12) // 小さい方
             ClockTicks(radius: 161, tickCount: 12, tickWidth: 10, tickLength: 35) // 目盛り
             // 長針　秒針のこと
-            ClockHand(angleValue: $angleValue, config: secConfig)
+            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[0], config: secConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -53,7 +58,7 @@ struct ClockView: View{
                         }
                 )
             // 短針
-            ClockHand(angleValue: $angleValue, config: minConfig)
+            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[1], config: minConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -78,12 +83,16 @@ struct ClockView: View{
                             previousAngle = nil
                         }
                 )
+
             Circle()
                 .fill(.black)
                 .frame(width: 20, height: 20)
             Circle()
-                .fill(.green)
+                .fill(configStore.giveHandColors()[1])
                 .frame(width: 8, height: 8)
+        }
+        .onChange(of: angleValue) { _ in
+            giveHaptics(impactType: "select", ifActivate: (!isTimerRunning && configStore.isHapticsOn))
         }
     }
 }

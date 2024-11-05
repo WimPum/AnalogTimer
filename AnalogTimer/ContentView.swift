@@ -31,6 +31,15 @@ struct ContentView: View {
             }
             VStack(){ // タイマーの輪っか
                 HStack(){
+                    Button(action: {configStore.giveRandomBgNumber()}){
+                        Image(systemName: "arrow.trianglehead.2.counterclockwise").padding(.leading, 12.0)
+//                            .foregroundStyle(.white)
+//                            .frame(width: 60, height: 60)
+//                            .background(
+//                                Circle()
+//                                    .foregroundStyle(.blue)
+//                            )
+                    }
                     Spacer()//左端に表示する
                     Button(action: {self.isSettingsView.toggle()}){
                         Image(systemName: "gearshape.fill").padding(.trailing, 12.0)
@@ -38,27 +47,33 @@ struct ContentView: View {
                 }
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
                 Spacer()
-                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: false) // (timerCtrl.timer != nil)
+                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
+                    .animation(.easeInOut, value: configStore.giveBackground())
                     .padding(5)
                 Spacer().frame(height: 50)
-                Button(action: {
-                    if (timerCtrl.timer == nil) {
-                        currentDate = Date.now
-                        timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
-                    } else {
-                        timerCtrl.stopTimer()
+                HStack{
+                    Spacer()
+                    Button(action: {
+                        if (timerCtrl.timer == nil) {
+                            currentDate = Date.now
+                            timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
+                        } else {
+                            timerCtrl.stopTimer()
+                        }
+                    }){
+                        Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
+                            .foregroundStyle(.white)
+                            .frame(width: 130, height: 60)
+                            .glassMaterial(cornerRadius: 12)
+                        //                        .background(
+                        //                            RoundedRectangle(cornerRadius: CGFloat(12))
+                        //                                .foregroundStyle(.blue)
+                        //                        )
                     }
-                }){
-                    Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
-                        .foregroundStyle(.white)
-                        .frame(width: 130, height: 60)
-                        .glassMaterial(cornerRadius: 12)
-//                        .background(
-//                            RoundedRectangle(cornerRadius: CGFloat(12))
-//                                .foregroundStyle(.blue)
-//                        )
+                    Spacer()
+                    // botann
                 }
-                
+//                Slider(value: $timerCtrl.angleValue, in: 0...21_600).padding()
                 Spacer()
             }
         }

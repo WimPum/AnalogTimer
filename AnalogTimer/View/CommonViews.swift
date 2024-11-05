@@ -13,18 +13,19 @@ import SwiftUI
 // angleValueは外から変更できるようにBindingにしてある
 struct ClockHand: View {
     @Binding var angleValue: CGFloat    // 今の角度
+    var color: Color
     let config: Config
     var body: some View {
         ZStack{
             // つかむところ
             Capsule()
-                .fill(config.color)
+                .fill(color)
                 .frame(width: config.knobWidth, height: config.knobLength)
                 .padding(15) // paddingがあると掴みやすい
                 .offset(y: -(config.knobLength / 2 + config.tailLength)) // 初期状態
             ClockTail(length: config.tailLength)
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                .fill(config.color)
+                .fill(color)
         }
         .frame(width: (config.tailLength + config.knobLength) * 2,
                height: (config.tailLength + config.knobLength) * 2)
@@ -68,7 +69,6 @@ struct ClockTicks: View {
 }
 
 struct Config { // 位置とか設定
-    let color: Color
     let divisor: CGFloat // 分針は回転が60倍遅くなる だから60で割る
     let snapCount: Int // snapする数
     let knobLength: CGFloat // 長さ
