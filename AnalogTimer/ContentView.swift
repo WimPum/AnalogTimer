@@ -32,7 +32,7 @@ struct ContentView: View {
             VStack(){ // タイマーの輪っか
                 HStack(){
                     Button(action: {configStore.giveRandomBgNumber()}){
-                        Image(systemName: "arrow.trianglehead.2.counterclockwise").padding(.leading, 12.0)
+                        Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
 //                            .foregroundStyle(.white)
 //                            .frame(width: 60, height: 60)
 //                            .background(

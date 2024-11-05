@@ -16,8 +16,8 @@ struct ClockView: View{
     @State private var previousAngle: CGFloat? = 0.0    // ドラッグ開始時の角度を保持する すごいやつ
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
-    let secConfig = Config(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 9, tailLength: 23)
-    let minConfig = Config(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 11, tailLength: 23)
+    let secConfig = Config(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 12, tailLength: 23)
+    let minConfig = Config(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 14, tailLength: 23)
     
     // settings
     var isSnappy: Bool          // スナップ有無
@@ -30,7 +30,7 @@ struct ClockView: View{
                 .foregroundStyle(Color.white)
                 .padding()
             ClockTicks(radius: 170, tickCount: 60, tickWidth: 6, tickLength: 12) // 小さい方
-            ClockTicks(radius: 161, tickCount: 12, tickWidth: 10, tickLength: 35) // 目盛り
+            ClockTicks(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35) // 目盛り
             // 長針　秒針のこと
             ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[0], config: secConfig)
                 .gesture(
