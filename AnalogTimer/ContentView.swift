@@ -29,7 +29,8 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
                     .animation(.easeInOut, value: configStore.giveBackground())
             }
-            VStack(){ // タイマーの輪っか
+            VStack(){
+                // Upper buttons
                 HStack(){
                     Button(action: {configStore.giveRandomBgNumber()}){
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
@@ -47,31 +48,36 @@ struct ContentView: View {
                 }
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
                 Spacer()
-                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
-                    .animation(.easeInOut, value: configStore.giveBackground())
-                    .padding(5)
-                Spacer().frame(height: 50)
-                HStack{
-                    Spacer()
-                    Button(action: {
-                        if (timerCtrl.timer == nil) {
-                            currentDate = Date.now
-                            timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
-                        } else {
-                            timerCtrl.stopTimer()
+                
+                // portrait, landscapeの自動切り替え
+                DynamicStack{
+//                    Spacer()
+                    ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
+                        .animation(.easeInOut, value: configStore.giveBackground())
+                        .padding(5)
+                    Spacer().frame(width: 50, height: 50)
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            if (timerCtrl.timer == nil) {
+                                currentDate = Date.now
+                                timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
+                            } else {
+                                timerCtrl.stopTimer()
+                            }
+                        }){
+                            Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
+                                .foregroundStyle(.white)
+                                .frame(width: 130, height: 60)
+                                .glassMaterial(cornerRadius: 12)
+                            //                        .background(
+                            //                            RoundedRectangle(cornerRadius: CGFloat(12))
+                            //                                .foregroundStyle(.blue)
+                            //                        )
                         }
-                    }){
-                        Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
-                            .foregroundStyle(.white)
-                            .frame(width: 130, height: 60)
-                            .glassMaterial(cornerRadius: 12)
-                        //                        .background(
-                        //                            RoundedRectangle(cornerRadius: CGFloat(12))
-                        //                                .foregroundStyle(.blue)
-                        //                        )
+                        Spacer()
+                        // botann
                     }
-                    Spacer()
-                    // botann
                 }
 //                Slider(value: $timerCtrl.angleValue, in: 0...21_600).padding()
                 Spacer()
@@ -82,15 +88,13 @@ struct ContentView: View {
             SettingsView(isPresentedLocal: self.$isSettingsView)
                 .sheetDetents()
         }
-//        .onAppear(){
-////            timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
-////            timerCtrl.maxValue = timerCtrl.cleanedTime
-//        }
         .onAppear{//起動時に一回だけ実行となる このContentViewしかないから
             if configStore.configBgNumber > configStore.colorList.count-1{ // crash guard
                 configStore.configBgNumber = 20 // hardcoded
             }
             configStore.giveRandomBgNumber()
+//            timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
+//            timerCtrl.maxValue = timerCtrl.cleanedTime
         }
     }
 }

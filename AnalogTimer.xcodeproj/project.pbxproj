@@ -21,6 +21,7 @@
 		B1A326E82CD9104900D3C934 /* IntSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E42CD9104900D3C934 /* IntSlider.swift */; };
 		B1A326E92CD9104900D3C934 /* limitedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E52CD9104900D3C934 /* limitedTextField.swift */; };
 		B1A326EA2CD9104900D3C934 /* AnimGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A326E62CD9104900D3C934 /* AnimGradient.swift */; };
+		B1A3270C2CDB45CF00D3C934 /* DynamicStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A3270B2CDB45CF00D3C934 /* DynamicStack.swift */; };
 		B1E876E22C01AFD200810D85 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E876E12C01AFD100810D85 /* Functions.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		B1A326E42CD9104900D3C934 /* IntSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntSlider.swift; sourceTree = "<group>"; };
 		B1A326E52CD9104900D3C934 /* limitedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = limitedTextField.swift; sourceTree = "<group>"; };
 		B1A326E62CD9104900D3C934 /* AnimGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimGradient.swift; sourceTree = "<group>"; };
+		B1A3270B2CDB45CF00D3C934 /* DynamicStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicStack.swift; sourceTree = "<group>"; };
 		B1E876E12C01AFD100810D85 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,6 +130,7 @@
 				B1A326E42CD9104900D3C934 /* IntSlider.swift */,
 				B1A326E52CD9104900D3C934 /* limitedTextField.swift */,
 				B1A326E62CD9104900D3C934 /* AnimGradient.swift */,
+				B1A3270B2CDB45CF00D3C934 /* DynamicStack.swift */,
 			);
 			path = CustomElement;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				B15D3AF52BC1EFBD00118FAB /* TimerLogic.swift in Sources */,
 				B15D3AF22BC1EFBD00118FAB /* ContentView.swift in Sources */,
 				B15D3AF02BC1EFBD00118FAB /* AnalogTimerApp.swift in Sources */,
+				B1A3270C2CDB45CF00D3C934 /* DynamicStack.swift in Sources */,
 				B1A326DA2CD90AAD00D3C934 /* AboutView.swift in Sources */,
 				B1A326E02CD90AB400D3C934 /* ClockView.swift in Sources */,
 				B1A326E32CD90DC100D3C934 /* Extensions.swift in Sources */,
@@ -357,7 +361,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -393,7 +397,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
