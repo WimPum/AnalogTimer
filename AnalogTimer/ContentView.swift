@@ -31,6 +31,7 @@ struct ContentView: View {
             }
             VStack(){
                 // Upper buttons
+                Spacer().frame(height: 5)
                 HStack(){
                     Button(action: {configStore.giveRandomBgNumber()}){
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
@@ -48,40 +49,38 @@ struct ContentView: View {
                 }
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
                 Spacer()
-                
-                // portrait, landscapeの自動切り替え
-                DynamicStack{
-//                    Spacer()
-                    ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
-                        .animation(.easeInOut, value: configStore.giveBackground())
-                        .padding(5)
-                    Spacer().frame(width: 50, height: 50)
-                    HStack{
-                        Spacer()
-                        Button(action: {
-                            if (timerCtrl.timer == nil) {
-                                currentDate = Date.now
-                                timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
-                            } else {
-                                timerCtrl.stopTimer()
-                            }
-                        }){
-                            Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
-                                .foregroundStyle(.white)
-                                .frame(width: 130, height: 60)
-                                .glassMaterial(cornerRadius: 12)
-                            //                        .background(
-                            //                            RoundedRectangle(cornerRadius: CGFloat(12))
-                            //                                .foregroundStyle(.blue)
-                            //                        )
-                        }
-                        Spacer()
-                        // botann
+            }
+            // portrait, landscapeの自動切り替え
+            DynamicStack{
+                Spacer()
+                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
+                    .animation(.easeInOut, value: configStore.giveBackground())
+                    .border(Color.blue, width: 8)
+                    .scaledToFit()
+                    .padding(7)
+                    
+//                Spacer().frame(width: 50, height: 50)
+                Button(action: {
+                    if (timerCtrl.timer == nil) {
+                        currentDate = Date.now
+                        timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
+                    } else {
+                        timerCtrl.stopTimer()
                     }
+                }){
+                    Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
+                        .foregroundStyle(.white)
+                        .frame(width: 130, height: 60)
+                        .glassMaterial(cornerRadius: 12)
+                        .padding(30)
+//                            .background(
+//                                RoundedRectangle(cornerRadius: CGFloat(12))
+//                                    .foregroundStyle(.blue)
+//                            )
                 }
-//                Slider(value: $timerCtrl.angleValue, in: 0...21_600).padding()
                 Spacer()
             }
+//                Slider(value: $timerCtrl.angleValue, in: 0...21_600).padding()
         }
         //設定画面
         .sheet(isPresented: self.$isSettingsView){

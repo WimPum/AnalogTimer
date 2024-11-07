@@ -65,6 +65,7 @@ struct ClockTicks: View {
                     .rotationEffect(.radians(angle)) // 目盛りの位置を回転
             }
         }
+        .frame(width: radius * 2 + tickLength, height: radius * 2 + tickLength, alignment: .center)
     }
 }
 
@@ -74,4 +75,9 @@ struct Config { // 位置とか設定
     let knobLength: CGFloat // 長さ
     let knobWidth: CGFloat // 半径 あとで2倍する
     let tailLength: CGFloat // 針の先端の長さ
+}
+
+#Preview {
+    ClockTicks(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35)
+        .border(.red, width: 5)
 }

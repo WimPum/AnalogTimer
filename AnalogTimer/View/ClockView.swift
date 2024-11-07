@@ -96,3 +96,10 @@ struct ClockView: View{
         }
     }
 }
+
+//#Preview{
+//    @Previewable @State var timerCtrl: CGFloat = 0.0
+//    ClockView(angleValue: $timerCtrl, isSnappy: true, isTimerRunning: false)
+//        .border(.blue,width: 5)
+//        .environmentObject(SettingsStore()) // environmentObjかけてるとプレビューできない
+//}
