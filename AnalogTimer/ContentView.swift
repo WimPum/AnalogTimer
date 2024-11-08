@@ -50,37 +50,36 @@ struct ContentView: View {
                     }
                 }
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
-                .border(.red)
                 Spacer()
             }
             // portrait, landscapeの自動切り替え
-            DynamicStack{
-//                Spacer()
-                GeometryReader { g in
+            GeometryReader { g in
+                DynamicStack{ // best of both worlds!! GeometryView(screensize) & DynamicStack(autorotation)
+                    Spacer()
                     ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
                               isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
                         .animation(.easeInOut, value: configStore.giveBackground())
-                        .frame(width: g.size.width, height: g.size.height) // center
-                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.95)
-                        .border(Color.blue, width: 7)
-                }.border(.orange, width: 3)
-
-                Button(action: {
-                    if (timerCtrl.timer == nil) {
-                        currentDate = Date.now
-                        timerCtrl.startTimer(interval: 0.01)
-                    } else {
-                        timerCtrl.stopTimer()
-                    }
-                }){
-                    Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
-                        .foregroundStyle(.white)
-                        .frame(width: 130, height: 60)
-                        .glassMaterial(cornerRadius: 12)  
-                }.padding(30)
-                .border(.yellow)
-                Spacer()
+                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
+//                        .border(Color.blue, width: 6)
+                    Button(action: {
+                        if (timerCtrl.timer == nil) {
+                            currentDate = Date.now
+                            timerCtrl.startTimer(interval: 0.01)
+                        } else {
+                            timerCtrl.stopTimer()
+                        }
+                    }){
+                        Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
+                            .foregroundStyle(.white)
+                            .frame(width: 130, height: 60)
+                            .glassMaterial(cornerRadius: 12)
+                    }.padding(30)
+//                        .border(.yellow)
+                    Spacer()
+                }
             }
+            //.border(.orange, width: 3)
 //                Slider(value: $scale, in: 0...2).padding()
         }
         //設定画面
@@ -98,7 +97,6 @@ struct ContentView: View {
         }
     }
 }
-
 
 
 #Preview {

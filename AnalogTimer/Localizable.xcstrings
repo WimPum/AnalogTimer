@@ -18,6 +18,22 @@
         }
       }
     },
+    "%@:%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@:%2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@:%2$@"
+          }
+        }
+      }
+    },
     "%lld" : {
       "localizations" : {
         "en" : {
@@ -66,66 +82,12 @@
         }
       }
     },
-    "About CSV" : {
+    "AnalogTimer" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About CSV"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CSVについて"
-          }
-        }
-      }
-    },
-    "All drawn" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All drawn"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全て抽出済み"
-          }
-        }
-      }
-    },
-    "Animation count: %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Animation count: %lld"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "表示される数字の数: %lld"
-          }
-        }
-      }
-    },
-    "Animation speed: %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Animation speed: %lld"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "エフェクトの速さ: %lld"
+            "value" : "AnalogTimer"
           }
         }
       }
@@ -181,38 +143,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "シャンパン"
-          }
-        }
-      }
-    },
-    "clear names" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "clear names"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "名前クリア"
-          }
-        }
-      }
-    },
-    "Creating CSV files" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Creating CSV files"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CSVを作る"
           }
         }
       }
@@ -278,7 +208,18 @@
         }
       }
     },
+    "Enable snapping" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スナップを有効にする"
+          }
+        }
+      }
+    },
     "Error" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -411,14 +352,8 @@
         }
       }
     },
-    "Haptics for rolling" : {
+    "Haptics" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haptics for rolling"
-          }
-        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -428,6 +363,7 @@
       }
     },
     "History" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -476,6 +412,7 @@
       }
     },
     "Main" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -492,6 +429,7 @@
       }
     },
     "Max" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -508,6 +446,7 @@
       }
     },
     "Min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -541,6 +480,7 @@
       }
     },
     "MIT License" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -585,6 +525,7 @@
       }
     },
     "Next" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -596,22 +537,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next"
-          }
-        }
-      }
-    },
-    "Next draw" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next draw"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選ぶ"
           }
         }
       }
@@ -628,6 +553,7 @@
       }
     },
     "No.%lld" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -654,71 +580,6 @@
         }
       }
     },
-    "open csv" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "open csv"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CSV選択"
-          }
-        }
-      }
-    },
-    "press Start Over to apply changes" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "press Start Over to apply changes"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "やり直しを押して変更を適用"
-          }
-        }
-      }
-    },
-    "press Start over to reset" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "press Start over to reset"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "やり直しを押してリセット"
-          }
-        }
-      }
-    },
-    "put bigger number on right box" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "put bigger number on right box"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "右側の数字の方が大きくなるようにしてください"
-          }
-        }
-      }
-    },
     "Random" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -737,6 +598,7 @@
       }
     },
     "Randomizer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -770,6 +632,7 @@
       }
     },
     "Reset" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -802,6 +665,7 @@
       }
     },
     "Rolling animation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -829,22 +693,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "設定"
-          }
-        }
-      }
-    },
-    "Show names when landscape mode" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show names when landscape mode"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "横画面に名前を表示"
           }
         }
       }
@@ -884,6 +732,7 @@
       }
     },
     "Start over" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -895,6 +744,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "やり直し"
+          }
+        }
+      }
+    },
+    "Start Timer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタート"
+          }
+        }
+      }
+    },
+    "Stop Timer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストップ"
           }
         }
       }
@@ -1022,38 +891,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "冬"
-          }
-        }
-      }
-    },
-    "You can create CSV files in Excel or Numbers. Lists can be vertical or horizontal. Only the 1st column of the longer dimension will be used for display." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can create CSV files in Excel or Numbers. Lists can be vertical or horizontal. Only the 1st column of the longer dimension will be used for display."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CSVファイルはExcelやNumbersで作れます。リストの向きは縦横どちらでも読めます。長い方の一列目だけ表示に使われます。"
-          }
-        }
-      }
-    },
-    "You can load a csv file that contains a list of names and drawn names will be shown under the number." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can load a csv file that contains a list of names and drawn names will be shown under the number."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "名簿などをCSVファイルにして読み込むと、数字の下に対応する名前が表示されます。"
           }
         }
       }
