@@ -9,33 +9,42 @@
 
 import SwiftUI
 
+
 struct DynamicStack<Content: View>: View {
-    // 横画面検出(横にしたら縦の大きさ(Vertical)はみんな .compact)
-    @Environment(\.verticalSizeClass) private var vSizeClass
-    
-    // なんでかみんなHorizontalを使うけどできるの？？ randomizerでも使えなかった
-    @Environment(\.horizontalSizeClass) private var hSizeClass
-    
+//    // 横画面検出(横にしたら縦の大きさ(Vertical)はみんな .compact)
+//    @Environment(\.verticalSizeClass) private var vSizeClass
+//
+//    // なんでかみんなHorizontalを使うけどできるの？？ randomizerでも使えなかった
+//    @Environment(\.horizontalSizeClass) private var hSizeClass
     var spacing: CGFloat?
+    
     @ViewBuilder var content: () -> Content // ????????????
     
     var body: some View {
-        switch vSizeClass {
-        case .regular:
-            vStack
-        case .compact, .none:
-            hStack
-        @unknown default:
-            vStack
+        GeometryReader { g in
+            if g.size.width >= g.size.height{
+                hStack
+            }
+            else{
+                vStack
+            }
         }
-//        switch hSizeClass { // うまくいかない
+//        switch vSizeClass {
 //        case .regular:
-//            hStack
-//        case .compact, .none:
 //            vStack
-//        @unknown default:
+//        case .compact, .none:
 //            hStack
+//        @unknown default:
+//            vStack
 //        }
+////        switch hSizeClass { // うまくいかない
+////        case .regular:
+////            hStack
+////        case .compact, .none:
+////            vStack
+////        @unknown default:
+////            hStack
+////        }
     }
 }
 
@@ -55,7 +64,7 @@ private extension DynamicStack {
         )
     }
 }
-    
+
 #Preview {
     DynamicStack{
         Text("A")
