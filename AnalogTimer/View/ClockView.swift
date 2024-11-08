@@ -16,8 +16,8 @@ struct ClockView: View{
     @State private var previousAngle: CGFloat? = 0.0    // ドラッグ開始時の角度を保持する すごいやつ
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
-    let secConfig = Config(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 12, tailLength: 23)
-    let minConfig = Config(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 14, tailLength: 23)
+
+    let clockConfig: ClockViewConfig
     
     // settings
     var isSnappy: Bool          // スナップ有無
@@ -29,16 +29,16 @@ struct ClockView: View{
                 .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 80, weight: .light))) // 等幅モード！！
                 .foregroundStyle(Color.white)
                 .padding()
-            ClockTicks(radius: 170, tickCount: 60, tickWidth: 6, tickLength: 12) // 小さい方
-            ClockTicks(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35) // 目盛り
+            ClockTicks(config: clockConfig.smallTicks) // 小さい方
+            ClockTicks(config: clockConfig.largeTicks) // 目盛り
             // 長針　秒針のこと
-            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[0], config: secConfig)
+            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[0], config: clockConfig.secConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
                             if isTimerRunning == false && isMinDragging == false{
-                                let dragAngle = angleSnapper(degAngle: returnDegAngle(config: secConfig, location: value.location),
-                                                             snapAmount: secConfig.snapCount, enableSnap: isSnappy)
+                                let dragAngle = angleSnapper(degAngle: returnDegAngle(config: clockConfig.secConfig, location: value.location),
+                                                             snapAmount: clockConfig.secConfig.snapCount, enableSnap: isSnappy)
                                 isSecDragging = true
                                 if let previousAngle = previousAngle{ // 値があれば
                                     var angleChange = dragAngle - previousAngle // 変わった角度の大きさ
@@ -47,7 +47,7 @@ struct ClockView: View{
                                     angleChange = angleFormatter180(degAngle: angleChange)
                                     angleValue += angleChange
                                     angleValue = angleSnapper(degAngle: angleFormatterSec(degAngle: angleValue),
-                                                              snapAmount: secConfig.snapCount, enableSnap: isSnappy)
+                                                              snapAmount: clockConfig.secConfig.snapCount, enableSnap: isSnappy)
                                 }
                                 previousAngle = dragAngle
                             }
@@ -58,21 +58,21 @@ struct ClockView: View{
                         }
                 )
             // 短針
-            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[1], config: minConfig)
+            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[1], config: clockConfig.minConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
                             if isTimerRunning == false && isSecDragging == false{
-                                let dragAngle = angleSnapper(degAngle: returnDegAngle(config: minConfig, location: value.location),
-                                                             snapAmount: minConfig.snapCount, enableSnap: true)
+                                let dragAngle = angleSnapper(degAngle: returnDegAngle(config: clockConfig.minConfig, location: value.location),
+                                                             snapAmount: clockConfig.minConfig.snapCount, enableSnap: true)
                                 isMinDragging = true
                                 if let previousAngle = previousAngle{ // 値があれば
                                     var angleChange = dragAngle - previousAngle // 変わった角度の大きさ
                                     
                                     // formatter
                                     angleChange = angleSnapper(degAngle: angleFormatter180(degAngle: angleChange),
-                                                               snapAmount: minConfig.snapCount, enableSnap: true)
-                                    angleValue = angleChange * minConfig.divisor + angleValue
+                                                               snapAmount: clockConfig.minConfig.snapCount, enableSnap: true)
+                                    angleValue = angleChange * clockConfig.minConfig.divisor + angleValue
                                     angleValue = angleFormatterSec(degAngle: angleValue)
                                 }
                                 previousAngle = dragAngle
@@ -95,6 +95,13 @@ struct ClockView: View{
             giveHaptics(impactType: "select", ifActivate: (!isTimerRunning && configStore.isHapticsOn))
         }
     }
+}
+
+struct ClockViewConfig {
+    let secConfig: HandConfig
+    let minConfig: HandConfig
+    let smallTicks: TickConfig
+    let largeTicks: TickConfig
 }
 
 //#Preview{

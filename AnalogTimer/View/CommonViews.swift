@@ -14,7 +14,7 @@ import SwiftUI
 struct ClockHand: View {
     @Binding var angleValue: CGFloat    // 今の角度
     var color: Color
-    let config: Config
+    let config: HandConfig
     var body: some View {
         ZStack{
             // つかむところ
@@ -46,30 +46,27 @@ struct ClockTail: Shape {
 }
 
 struct ClockTicks: View {
-    let radius: CGFloat
-    let tickCount: Int // 目盛りの総数
-    let tickWidth: CGFloat // 目盛りの太さ
-    let tickLength: CGFloat // 目盛りの長さ
+    let config: TickConfig
 
     var body: some View {
         ZStack(){
-            ForEach(0..<tickCount, id: \.self) { index in
-                let angle = Double(index) / Double(tickCount) * 2 * .pi // 目盛りの角度
+            ForEach(0..<config.tickCount, id: \.self) { index in
+                let angle = Double(index) / Double(config.tickCount) * 2 * .pi // 目盛りの角度
                 
                 // 目盛りを描画
                 Rectangle()
                     .fill(Color.white)
-                    .frame(width: tickWidth, height: tickLength)
+                    .frame(width: config.tickWidth, height: config.tickLength)
                     .clipShape(Capsule())
-                    .offset(x: 0, y: -radius) // 時計の中心からの距離
+                    .offset(x: 0, y: -config.radius) // 時計の中心からの距離
                     .rotationEffect(.radians(angle)) // 目盛りの位置を回転
             }
         }
-        .frame(width: radius * 2 + tickLength, height: radius * 2 + tickLength, alignment: .center)
+        .frame(width: config.radius * 2 + config.tickLength, height: config.radius * 2 + config.tickLength, alignment: .center)
     }
 }
 
-struct Config { // 位置とか設定
+struct HandConfig { // 位置とか設定
     let divisor: CGFloat // 分針は回転が60倍遅くなる だから60で割る
     let snapCount: Int // snapする数
     let knobLength: CGFloat // 長さ
@@ -77,7 +74,15 @@ struct Config { // 位置とか設定
     let tailLength: CGFloat // 針の先端の長さ
 }
 
+struct TickConfig {
+    let radius: CGFloat
+    let tickCount: Int // 目盛りの総数
+    let tickWidth: CGFloat // 目盛りの太さ
+    let tickLength: CGFloat // 目盛りの長さ
+}
+
 #Preview {
-    ClockTicks(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35)
+    let tickConfig = TickConfig(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35)
+    ClockTicks(config: tickConfig)
         .border(.red, width: 5)
 }

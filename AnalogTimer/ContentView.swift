@@ -14,6 +14,14 @@ struct ContentView: View {
     
     @State private var isSettingsView: Bool = false//設定画面を開く用
     @State private var currentDate: Date = Date()
+    
+    let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
+        secConfig: HandConfig(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 12, tailLength: 23),
+        minConfig: HandConfig(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 14, tailLength: 23),
+        smallTicks: TickConfig(radius: 172, tickCount: 60, tickWidth: 6, tickLength: 12),  // 小さい方
+        largeTicks: TickConfig(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 34) // 目盛り
+    )
+    
     var body: some View {
         ZStack {
             if #available(iOS 17, *){
@@ -35,12 +43,6 @@ struct ContentView: View {
                 HStack(){
                     Button(action: {configStore.giveRandomBgNumber()}){
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
-//                            .foregroundStyle(.white)
-//                            .frame(width: 60, height: 60)
-//                            .background(
-//                                Circle()
-//                                    .foregroundStyle(.blue)
-//                            )
                     }
                     Spacer()//左端に表示する
                     Button(action: {self.isSettingsView.toggle()}){
@@ -48,22 +50,25 @@ struct ContentView: View {
                     }
                 }
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
+                .border(.red)
                 Spacer()
             }
             // portrait, landscapeの自動切り替え
             DynamicStack{
-                Spacer()
-                ClockView(angleValue: $timerCtrl.angleValue, isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
-                    .animation(.easeInOut, value: configStore.giveBackground())
-                    .border(Color.blue, width: 8)
-                    .scaledToFit()
-                    .padding(7)
-                    
-//                Spacer().frame(width: 50, height: 50)
+//                Spacer()
+                GeometryReader { g in
+                    ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
+                              isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
+                        .animation(.easeInOut, value: configStore.giveBackground())
+                        .frame(width: g.size.width, height: g.size.height) // center
+                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.95)
+                        .border(Color.blue, width: 7)
+                }.border(.orange, width: 3)
+
                 Button(action: {
                     if (timerCtrl.timer == nil) {
                         currentDate = Date.now
-                        timerCtrl.startTimer(interval: 0.01) // intervalは実質精度コントロール
+                        timerCtrl.startTimer(interval: 0.01)
                     } else {
                         timerCtrl.stopTimer()
                     }
@@ -71,16 +76,12 @@ struct ContentView: View {
                     Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
                         .foregroundStyle(.white)
                         .frame(width: 130, height: 60)
-                        .glassMaterial(cornerRadius: 12)
-                        .padding(30)
-//                            .background(
-//                                RoundedRectangle(cornerRadius: CGFloat(12))
-//                                    .foregroundStyle(.blue)
-//                            )
-                }
+                        .glassMaterial(cornerRadius: 12)  
+                }.padding(30)
+                .border(.yellow)
                 Spacer()
             }
-//                Slider(value: $timerCtrl.angleValue, in: 0...21_600).padding()
+//                Slider(value: $scale, in: 0...2).padding()
         }
         //設定画面
         .sheet(isPresented: self.$isSettingsView){
@@ -97,6 +98,8 @@ struct ContentView: View {
         }
     }
 }
+
+
 
 #Preview {
     ContentView()

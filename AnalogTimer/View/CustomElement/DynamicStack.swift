@@ -14,7 +14,7 @@ struct DynamicStack<Content: View>: View {
     @Environment(\.verticalSizeClass) private var vSizeClass
     
     // なんでかみんなHorizontalを使うけどできるの？？ randomizerでも使えなかった
-//    @Environment(\.horizontalSizeClass) private var vSizeClass
+    @Environment(\.horizontalSizeClass) private var hSizeClass
     
     var spacing: CGFloat?
     @ViewBuilder var content: () -> Content // ????????????
@@ -28,6 +28,14 @@ struct DynamicStack<Content: View>: View {
         @unknown default:
             vStack
         }
+//        switch hSizeClass { // うまくいかない
+//        case .regular:
+//            hStack
+//        case .compact, .none:
+//            vStack
+//        @unknown default:
+//            hStack
+//        }
     }
 }
 

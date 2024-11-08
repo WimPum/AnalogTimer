@@ -13,7 +13,7 @@ import UIKit
 // タッチされた場所から度数法で角度を返す
 // .pi/2は90度 初めに90°プラスした状態だからatan2の角度から90°引く
 // 針が1番上に来る時が0°
-func returnDegAngle(config: Config, location: CGPoint) -> CGFloat{
+func returnDegAngle(config: HandConfig, location: CGPoint) -> CGFloat{
     // ベクトル化
     let vector = CGVector(dx: location.x, dy: location.y)
 
