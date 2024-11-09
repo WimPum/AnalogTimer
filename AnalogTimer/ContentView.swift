@@ -41,7 +41,13 @@ struct ContentView: View {
                 // Upper buttons
                 Spacer().frame(height: 5)
                 HStack(){
-                    Button(action: {configStore.giveRandomBgNumber()}){
+                    Button(action: {
+                        configStore.giveRandomBgNumber()
+                        withAnimation(.easeInOut){
+                            timerCtrl.angleValue = 0
+                        }
+                        print("reset")
+                    }){
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
                     }
                     Spacer()//左端に表示する

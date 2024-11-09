@@ -33,6 +33,7 @@ class TimerLogic: ObservableObject{
 //                self.angleValue -= interval * 6 // タイマーを減らす箇所 6°で１秒だから
                 self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 6で割ったりかけたりしすぎ？
                 if self.angleValue <= 0 { // タイマー終了
+                    self.angleValue = 0 // clippit!!
                     self.stopTimer()
                 }
             }))
