@@ -12,8 +12,9 @@ struct ContentView: View {
     @EnvironmentObject var timerCtrl: TimerLogic // タイマー
     @EnvironmentObject var configStore: SettingsStore
     
+    //misc
+    @State private var viewSelection = 1    //ページを切り替える用
     @State private var isSettingsView: Bool = false//設定画面を開く用
-    @State private var currentDate: Date = Date()
     
     let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
         secConfig: HandConfig(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 12, tailLength: 23),
@@ -37,8 +38,51 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.all)
                     .animation(.easeInOut, value: configStore.giveBackground())
             }
+            // portrait, landscapeの自動切り替え
+            TabView(selection: $viewSelection){
+                //MARK: 1ページ目
+                GeometryReader { g in
+                    DynamicStack{ // best of both worlds!! GeometryView(screensize) & DynamicStack(autorotation)
+                        Spacer()
+                        ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
+                                  isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
+                        .animation(.easeInOut, value: configStore.giveBackground())
+                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
+                        Button(action: {
+                            if (timerCtrl.timer == nil) {
+                                timerCtrl.startTimer(interval: 0.01)
+                            } else {
+                                timerCtrl.stopTimer()
+                            }
+                        }){
+                            Text((timerCtrl.timer != nil) ? "Stop Timer \(Image(systemName: "pause.fill"))" : "Start Timer \(Image(systemName: "play.fill"))") // 円にしよう
+                                .foregroundStyle(.white)
+                                .frame(width: 130, height: 60)
+//                                .background(
+//                                    RoundedRectangle(cornerRadius: CGFloat(12))
+//                                        .foregroundStyle((timerCtrl.timer != nil) ? .red : .green)
+//                                )
+                                .glassMaterial(cornerRadius: 12)
+                        }.padding(30)
+                        Spacer()
+                    }
+                }
+                    .tabItem {
+                        Image(systemName: "timer")
+                        Text("Main") }
+                    .tag(1)
+                
+                //MARK: 2ページ目
+                Text("Hello, World!")
+                    .tabItem {
+                        Image(systemName: "stopwatch.fill")
+                        Text("History") }
+                    .tag(2)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .automatic)) // https://stackoverflow.com/questions/68310455/
+            // Upper buttons
             VStack(){
-                // Upper buttons
                 Spacer().frame(height: 5)
                 HStack(){
                     Button(action: {
@@ -51,6 +95,10 @@ struct ContentView: View {
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
                     }
                     Spacer()//左端に表示する
+                    if timerCtrl.timer != nil{
+                        Text("\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())")
+                    }
+                    Spacer()
                     Button(action: {self.isSettingsView.toggle()}){
                         Image(systemName: "gearshape.fill").padding(.trailing, 12.0)
                     }
@@ -58,35 +106,6 @@ struct ContentView: View {
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
                 Spacer()
             }
-            // portrait, landscapeの自動切り替え
-            GeometryReader { g in
-                DynamicStack{ // best of both worlds!! GeometryView(screensize) & DynamicStack(autorotation)
-                    Spacer()
-                    ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
-                              isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
-                        .animation(.easeInOut, value: configStore.giveBackground())
-                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
-                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
-//                        .border(Color.blue, width: 6)
-                    Button(action: {
-                        if (timerCtrl.timer == nil) {
-                            currentDate = Date.now
-                            timerCtrl.startTimer(interval: 0.01)
-                        } else {
-                            timerCtrl.stopTimer()
-                        }
-                    }){
-                        Text((timerCtrl.timer != nil) ? "Stop Timer" : "Start Timer")
-                            .foregroundStyle(.white)
-                            .frame(width: 130, height: 60)
-                            .glassMaterial(cornerRadius: 12)
-                    }.padding(30)
-//                        .border(.yellow)
-                    Spacer()
-                }
-            }
-            //.border(.orange, width: 3)
-//                Slider(value: $scale, in: 0...2).padding()
         }
         //設定画面
         .sheet(isPresented: self.$isSettingsView){

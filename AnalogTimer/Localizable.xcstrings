@@ -18,6 +18,22 @@
         }
       }
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%@:%@" : {
       "localizations" : {
         "en" : {
@@ -362,8 +378,10 @@
         }
       }
     },
+    "Hello, World!" : {
+
+    },
     "History" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -412,7 +430,6 @@
       }
     },
     "Main" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -480,7 +497,6 @@
       }
     },
     "MIT License" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -614,23 +630,6 @@
         }
       }
     },
-    "Refresh rate" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Refresh rate"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新頻度"
-          }
-        }
-      }
-    },
     "Reset" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -731,39 +730,28 @@
         }
       }
     },
-    "Start over" : {
-      "extractionState" : "stale",
+    "Start Timer %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start over"
+            "value" : "Start Timer %@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "やり直し"
+            "value" : "スタート %@"
           }
         }
       }
     },
-    "Start Timer" : {
+    "Stop Timer %@" : {
       "localizations" : {
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "スタート"
-          }
-        }
-      }
-    },
-    "Stop Timer" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ストップ"
+            "value" : "ストップ %@"
           }
         }
       }

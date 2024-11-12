@@ -17,26 +17,26 @@ final class SettingsStore: ObservableObject{
     @Published var randomColorCombo: [Color] = [Color.blue, Color.purple]
     // 色リスト
     let colorList: [ColorCombo] = [ // AAAAAARRRGGGG!!!! idはstringになります 今は色かぶっててもあとで変えられるようにしたい
-        ColorCombo(name: "Default",     gradColor: [Color.black, Color.gray],                       handColor: [Color.orange, Color.green]),
-        ColorCombo(name: "Dawn",        gradColor: [Color(hex: "5d77b9")!, Color(hex: "fadb92")!],  handColor: [Color(hex: "5d77b9")!, Color(hex: "fadb92")!]),
-        ColorCombo(name: "Twilight",    gradColor: [Color(hex: "4161b8")!, Color(hex: "e56f5e")!],  handColor: [Color(hex: "4161b8")!, Color(hex: "e56f5e")!]),
-        ColorCombo(name: "Night",       gradColor: [Color(hex: "214c80")!, Color(hex: "b6a7ea")!],  handColor: [Color(hex: "214c80")!, Color(hex: "b6a7ea")!]),
-        ColorCombo(name: "Aurora",      gradColor: [Color(hex: "7c1cbf")!, Color(hex: "5ecb92")!],  handColor: [Color(hex: "7c1cbf")!, Color(hex: "5ecb92")!]),
-        ColorCombo(name: "Fire",        gradColor: [Color.red, Color.yellow],                       handColor: [Color.red, Color.yellow]),
-        ColorCombo(name: "Summer",      gradColor: [Color(hex: "ccdf83")!, Color(hex: "2cde83")!],  handColor: [Color(hex: "ccdf83")!, Color(hex: "2cde83")!]),
-        ColorCombo(name: "Winter",      gradColor: [Color(hex: "dedfe3")!, Color(hex: "4a8a8b")!],  handColor: [Color(hex: "dedfe3")!, Color(hex: "4a8a8b")!]),
-        ColorCombo(name: "Sky",         gradColor: [Color(hex: "0645fc")!, Color(hex: "d2fafe")!],  handColor: [Color(hex: "0645fc")!, Color(hex: "d2fafe")!]),
-        ColorCombo(name: "Ocean",       gradColor: [Color(hex: "60e5ca")!, Color(hex: "374ebf")!],  handColor: [Color(hex: "60e5ca")!, Color(hex: "374ebf")!]),
-        ColorCombo(name: "Deep Ocean",  gradColor: [Color(hex: "1c6ac6")!, Color(hex: "171b5f")!],  handColor: [Color(hex: "1c6ac6")!, Color(hex: "171b5f")!]),
-        ColorCombo(name: "Beach",       gradColor: [Color(hex: "2ec29e")!, Color(hex: "f2d7a7")!],  handColor: [Color(hex: "2ec29e")!, Color(hex: "f2d7a7")!]),
-        ColorCombo(name: "Mountain",    gradColor: [Color(hex: "f59067")!, Color(hex: "63d115")!],  handColor: [Color(hex: "f59067")!, Color(hex: "63d115")!]),
-        ColorCombo(name: "Teddy bear",  gradColor: [Color(hex: "b18f61")!, Color(hex: "f0ddb3")!],  handColor: [Color(hex: "b18f61")!, Color(hex: "f0ddb3")!]),
-        ColorCombo(name: "Mint",        gradColor: [Color(hex: "70efda")!, Color(hex: "0d6967")!],  handColor: [Color(hex: "70efda")!, Color(hex: "0d6967")!]),
-        ColorCombo(name: "Grape",       gradColor: [Color.purple, Color.indigo],                    handColor: [Color.purple, Color.indigo]),
-        ColorCombo(name: "Strawberry",  gradColor: [Color(hex: "ec2172")!, Color(hex: "fbd9e5")!],  handColor: [Color(hex: "ec2172")!, Color(hex: "fbd9e5")!]),
-        ColorCombo(name: "Nectar",      gradColor: [Color(hex: "f6ca46")!, Color(hex: "eb7766")!],  handColor: [Color(hex: "f6ca46")!, Color(hex: "eb7766")!]),
-        ColorCombo(name: "Green Tea",   gradColor: [Color(hex: "2f9311")!, Color(hex: "e0f2e0")!],  handColor: [Color(hex: "2f9311")!, Color(hex: "e0f2e0")!]),
-        ColorCombo(name: "Champagne",   gradColor: [Color(hex: "fcefc9")!, Color(hex: "cea453")!],  handColor: [Color(hex: "fcefc9")!, Color(hex: "cea453")!]),
+        ColorCombo(name: "Default",     gradColor: [Color.black, Color.gray],    handColor: [Color.orange, Color.green]),
+        ColorCombo(name: "Dawn",        gradColor: [Color(hex: "5d77b9")!, Color(hex: "fadb92")!]),
+        ColorCombo(name: "Twilight",    gradColor: [Color(hex: "4161b8")!, Color(hex: "e56f5e")!]),
+        ColorCombo(name: "Night",       gradColor: [Color(hex: "214c80")!, Color(hex: "b6a7ea")!]),
+        ColorCombo(name: "Aurora",      gradColor: [Color(hex: "7c1cbf")!, Color(hex: "5ecb92")!]),
+        ColorCombo(name: "Fire",        gradColor: [Color.red, Color.yellow]),
+        ColorCombo(name: "Summer",      gradColor: [Color(hex: "ccdf83")!, Color(hex: "2cde83")!]),
+        ColorCombo(name: "Winter",      gradColor: [Color(hex: "dedfe3")!, Color(hex: "4a8a8b")!]),
+        ColorCombo(name: "Sky",         gradColor: [Color(hex: "0645fc")!, Color(hex: "d2fafe")!]),
+        ColorCombo(name: "Ocean",       gradColor: [Color(hex: "60e5ca")!, Color(hex: "374ebf")!]),
+        ColorCombo(name: "Deep Ocean",  gradColor: [Color(hex: "1c6ac6")!, Color(hex: "171b5f")!]),
+        ColorCombo(name: "Beach",       gradColor: [Color(hex: "2ec29e")!, Color(hex: "f2d7a7")!]),
+        ColorCombo(name: "Mountain",    gradColor: [Color(hex: "f59067")!, Color(hex: "63d115")!]),
+        ColorCombo(name: "Teddy bear",  gradColor: [Color(hex: "b18f61")!, Color(hex: "f0ddb3")!]),
+        ColorCombo(name: "Mint",        gradColor: [Color(hex: "70efda")!, Color(hex: "0d6967")!]),
+        ColorCombo(name: "Grape",       gradColor: [Color.purple, Color.indigo]),
+        ColorCombo(name: "Strawberry",  gradColor: [Color(hex: "ec2172")!, Color(hex: "fbd9e5")!]),
+        ColorCombo(name: "Nectar",      gradColor: [Color(hex: "f6ca46")!, Color(hex: "eb7766")!]),
+        ColorCombo(name: "Green Tea",   gradColor: [Color(hex: "2f9311")!, Color(hex: "e0f2e0")!]),
+        ColorCombo(name: "Champagne",   gradColor: [Color(hex: "fcefc9")!, Color(hex: "cea453")!]),
         ColorCombo(name: "Shuffle",     gradColor: []), // ダミーだから色は定義されない
         ColorCombo(name: "Random",      gradColor: [])
     ]
@@ -84,8 +84,11 @@ final class SettingsStore: ObservableObject{
     func giveHandColors() -> [Color]{
         if configBgNumber == colorList.count-1 {
            return randomColorCombo // まだ残しておこう
-       } else if colorList[backgroundPicker].handColor == nil || colorList[backgroundPicker].handColor!.isEmpty{
+       } else if (colorList[backgroundPicker].handColor == nil || colorList[backgroundPicker].handColor!.isEmpty) &&
+                 (colorList[backgroundPicker].gradColor == nil || colorList[backgroundPicker].gradColor!.isEmpty){ // どっちもない時
            return [.red, .blue] // hahaha dummies
+       } else if colorList[backgroundPicker].handColor == nil || colorList[backgroundPicker].handColor!.isEmpty{ // 背景グラデはある時
+           return colorList[backgroundPicker].gradColor!
        } else {
            //print(colorList[backgroundPicker].color!)
            return colorList[backgroundPicker].handColor!

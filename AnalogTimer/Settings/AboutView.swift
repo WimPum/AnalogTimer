@@ -24,7 +24,7 @@ struct AboutView: View {
                 Text("iOS \(UIDevice.current.systemVersion)").padding(1)
             }
             Text("© 2024 Ulyssa").padding(1)
-//            Link("MIT License", destination: URL(string: "https://opensource.org/license/mit")!).padding(1)
+            Link("MIT License", destination: URL(string: "https://opensource.org/license/mit")!).padding(1)
             Link("feedback", destination: URL(string: "https://forms.gle/aYxcCUKScGAzcp9Q6")!).padding(1)
             HStack{
                 Link("Website", destination: URL(string: "https://wimpum.github.io/Stuffs.html")!).padding(1)
