@@ -47,10 +47,16 @@ struct ContentView: View {
                         ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
                                   isSnappy: configStore.isSnappEnabled, isTimerRunning: (timerCtrl.timer != nil))
                         .animation(.easeInOut, value: configStore.giveBackground())
+                        .onChange(of: timerCtrl.angleValue){ _ in // 編集された を検知
+                            if timerCtrl.timer == nil{
+                                timerCtrl.isClockChanged = true
+                            }
+                        }
                         .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
                         .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
                         Button(action: {
                             if (timerCtrl.timer == nil) {
+                                timerCtrl.isClockChanged = false
                                 timerCtrl.startTimer(interval: 0.01)
                             } else {
                                 timerCtrl.stopTimer()
@@ -87,17 +93,22 @@ struct ContentView: View {
                 HStack(){
                     Button(action: {
                         configStore.giveRandomBgNumber()
-                        withAnimation(.easeInOut){
-                            timerCtrl.angleValue = 0
+                        if timerCtrl.timer == nil{
+                            withAnimation(.easeInOut){
+                                timerCtrl.angleValue = 0
+                            }
                         }
                         print("reset")
                     }){
                         Image(systemName: "arrow.clockwise").padding(.leading, 12.0)
                     }
                     Spacer()//左端に表示する
-                    if timerCtrl.timer != nil{
-                        Text("\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())")
+                    switch viewSelection {
+                    case 1: Text((timerCtrl.timer != nil) ? "\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())" : "Timer")
+                    case 2: Text("Stopwatch")
+                    default: Text("AnalogTimer")
                     }
+//                    Text("\(timerCtrl.isClockChanged)") // 値見る用
                     Spacer()
                     Button(action: {self.isSettingsView.toggle()}){
                         Image(systemName: "gearshape.fill").padding(.trailing, 12.0)
@@ -117,8 +128,14 @@ struct ContentView: View {
                 configStore.configBgNumber = 20 // hardcoded
             }
             configStore.giveRandomBgNumber()
-//            timerCtrl.cleanedTime = Double(DurationMin * 60 + DurationSec)
-//            timerCtrl.maxValue = timerCtrl.cleanedTime
+            // 1 checking for permission
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                if success {
+                    print("Permission approved!")
+                } else if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
 }

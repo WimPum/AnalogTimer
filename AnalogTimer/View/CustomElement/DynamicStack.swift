@@ -29,22 +29,6 @@ struct DynamicStack<Content: View>: View {
                 vStack
             }
         }
-//        switch vSizeClass {
-//        case .regular:
-//            vStack
-//        case .compact, .none:
-//            hStack
-//        @unknown default:
-//            vStack
-//        }
-////        switch hSizeClass { // うまくいかない
-////        case .regular:
-////            hStack
-////        case .compact, .none:
-////            vStack
-////        @unknown default:
-////            hStack
-////        }
     }
 }
 

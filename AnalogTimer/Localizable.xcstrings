@@ -379,7 +379,14 @@
       }
     },
     "Hello, World!" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "こんにちは！"
+          }
+        }
+      }
     },
     "History" : {
       "localizations" : {
@@ -756,6 +763,16 @@
         }
       }
     },
+    "Stopwatch" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストップウォッチ"
+          }
+        }
+      }
+    },
     "Strawberry" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -797,6 +814,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "テディベア"
+          }
+        }
+      }
+    },
+    "Timer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー"
           }
         }
       }

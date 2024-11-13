@@ -14,12 +14,13 @@ class TimerLogic: ObservableObject{
     // timer
     @Published var timer: AnyCancellable? // 実際のタイマー
     @Published var angleValue: CGFloat = 0.0
+    @Published var isClockChanged: Bool = false // タイマー画面が変更された(回されたかどうか)
     var startTime: Date = Date()
     var endTime: Date = Date()
     
     // sound
-    private var player: AVAudioPlayer!
-    let alarmSound = NSDataAsset(name: "Alarm")!
+//    private var player: AVAudioPlayer!
+//    let alarmSound = NSDataAsset(name: "Alarm")!
     
     func startTimer(interval: Double) { // limitはminuteで設定する
         // 呼び出し時の処理
@@ -31,7 +32,7 @@ class TimerLogic: ObservableObject{
         
         startTime = Date()
         endTime = startTime.addingTimeInterval(angleValue/6)
-        player = try? AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
+//        player = try? AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
         
         // タイマー宣言
         timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
@@ -40,8 +41,8 @@ class TimerLogic: ObservableObject{
             .sink(receiveValue: ({ value in
                 self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 6で割ったりかけたりしすぎ？
                 if self.angleValue <= 0 { // タイマー終了
-                    self.player.numberOfLoops = -1 //ループ回数して、-1で無限ループ
-                    self.player.play()  //再生 silentモードだとならないいいいいい
+//                    self.player.numberOfLoops = -1 //ループ回数して、-1で無限ループ
+//                    self.player.play()  //再生 silentモードだとならないいいいいい
                     self.angleValue = 0 // clippit!!
                     self.stopTimer()
                 }
