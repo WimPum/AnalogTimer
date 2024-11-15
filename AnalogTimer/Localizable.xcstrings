@@ -225,6 +225,7 @@
       }
     },
     "Enable snapping" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -749,6 +750,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "スタート %@"
+          }
+        }
+      }
+    },
+    "Stop Alarm %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラーム停止 %@"
           }
         }
       }

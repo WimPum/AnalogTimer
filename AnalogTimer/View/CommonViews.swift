@@ -62,7 +62,9 @@ struct ClockTicks: View {
                     .rotationEffect(.radians(angle)) // 目盛りの位置を回転
             }
         }
-        .frame(width: config.radius * 2 + config.tickLength, height: config.radius * 2 + config.tickLength, alignment: .center)
+        .frame(width: config.radius * 2 + config.tickLength,
+               height: config.radius * 2 + config.tickLength,
+               alignment: .center)
     }
 }
 
@@ -77,12 +79,12 @@ struct HandConfig { // 位置とか設定
 struct TickConfig {
     let radius: CGFloat
     let tickCount: Int // 目盛りの総数
-    let tickWidth: CGFloat // 目盛りの太さ
     let tickLength: CGFloat // 目盛りの長さ
+    let tickWidth: CGFloat // 目盛りの太さ
 }
 
 #Preview {
-    let tickConfig = TickConfig(radius: 161, tickCount: 12, tickWidth: 12, tickLength: 35)
+    let tickConfig = TickConfig(radius: 161, tickCount: 12, tickLength: 35, tickWidth: 12)
     ClockTicks(config: tickConfig)
         .border(.red, width: 5)
 }
