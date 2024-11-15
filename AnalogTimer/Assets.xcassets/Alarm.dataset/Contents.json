@@ -2,7 +2,8 @@
   "data" : [
     {
       "filename" : "Alarm.wav",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "universal-type-identifier" : "com.microsoft.waveform-audio"
     }
   ],
   "info" : {
