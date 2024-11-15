@@ -54,6 +54,7 @@ struct ContentView: View {
                         Button(action: {
                             if (timerCtrl.timer == nil) {
                                 timerCtrl.isClockChanged = false
+                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 更新
                                 timerCtrl.startTimer(interval: 0.01)
                             } else {
                                 timerCtrl.stopTimer()
@@ -117,6 +118,8 @@ struct ContentView: View {
                 configStore.configBgNumber = 20 // hardcoded
             }
             configStore.giveRandomBgNumber()
+            timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 更新
+            
             // 1 checking for permission
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                 if success {

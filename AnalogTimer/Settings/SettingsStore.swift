@@ -10,6 +10,7 @@ import SwiftUI
 final class SettingsStore: ObservableObject{
     @AppStorage("isHapticsOn") var isHapticsOn: Bool = true
 //    @AppStorage("isSnappEnabled") var isSnappEnabled: Bool = true // スナップするの？？
+    @AppStorage("isAlarmEnabled") var isAlarmEnabled: Bool = true // Alarm？？
     @AppStorage("backgroundPicker") var backgroundPicker: Int = 0    //今の背景の色設定用　設定画面ではいじれません
     @AppStorage("configBgNumber") var configBgNumber: Int = 0 // hardcodingを避けたかったが仕方なし　シャッフルがデフォ
     
@@ -98,6 +99,7 @@ final class SettingsStore: ObservableObject{
     func resetSettings() {
         isHapticsOn = true
 //        isSnappEnabled = true
+        isAlarmEnabled = true
         configBgNumber = 0
         giveRandomBgNumber()
     }

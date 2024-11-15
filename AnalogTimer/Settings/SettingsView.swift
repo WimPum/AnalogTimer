@@ -73,6 +73,7 @@ struct SettingsList: View{
         Section(header: Text("general")){
             Toggle("Haptics", isOn: $configStore.isHapticsOn)
 //            Toggle("Enable snapping", isOn: $configStore.isSnappEnabled)
+            Toggle("Enable Alarm", isOn: $configStore.isAlarmEnabled)
             Picker("Background color", selection: $configStore.configBgNumber){ // selectionにはid(string)が含まれる。
                 ForEach(0..<configStore.colorList.count, id: \.self) { index in
                     Text(LocalizedStringKey(configStore.colorList[index].name))

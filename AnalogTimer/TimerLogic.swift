@@ -19,8 +19,9 @@ class TimerLogic: ObservableObject{
     var endTime: Date = Date()
     
     // sound
+    var isAlarmEnabled: Bool = true // config
     private var player: AVAudioPlayer!
-    let alarmSound = NSDataAsset(name: "Alarm")!
+    private let alarmSound = NSDataAsset(name: "Alarm")!
     var isAlarmOn: Bool = false{
         didSet{
             guard let player else { return }
@@ -44,6 +45,7 @@ class TimerLogic: ObservableObject{
         // set start/end time
         startTime = Date()
         endTime = startTime.addingTimeInterval(angleValue/6)
+        sendNotification()
         
         // prepare sound
         player = try! AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
@@ -57,7 +59,9 @@ class TimerLogic: ObservableObject{
                 self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 6で割ったりかけたりしすぎ？
                 if self.angleValue <= 0 { // タイマー終了
                     self.angleValue = 0 // clippit!!
-                    self.isAlarmOn = true
+                    if self.isAlarmEnabled == true{
+                        self.isAlarmOn = true
+                    }
                     self.stopTimer()
                 }
             }))
@@ -67,9 +71,8 @@ class TimerLogic: ObservableObject{
         print("stopped timer")
         timer?.cancel()
         timer = nil
-        sendNotification() // 違う こうじゃない startTimerに入れるつもり
         if isAlarmOn == true{
-//            player.play()  //再生 silentモードだとならない
+            player.play()  //再生 silentモードだとならない あとbackground再生したい
         }
     }
     
@@ -87,10 +90,11 @@ class TimerLogic: ObservableObject{
         let notification = UNMutableNotificationContent()
         notification.title = "AnalogTimer"
         notification.body = "Timer has reached zero at \(returnEndTime())"
-        notification.sound = UNNotificationSound.default
+        notification.sound = .default // 是非とも変えたいところです
         
         // いつ？
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let components = Calendar.current.dateComponents([.calendar, .hour, .minute, .second], from: endTime)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }

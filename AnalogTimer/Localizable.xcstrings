@@ -224,6 +224,16 @@
         }
       }
     },
+    "Enable Alarm" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラーム音を鳴らす"
+          }
+        }
+      }
+    },
     "Enable snapping" : {
       "extractionState" : "stale",
       "localizations" : {
