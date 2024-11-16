@@ -17,8 +17,9 @@ struct ContentView: View {
     @State private var isSettingsView: Bool = false//設定画面を開く用
     
     let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
-        secConfig: HandConfig(divisor: 1, snapCount: 60, knobLength: 135, knobWidth: 12, tailLength: 23),
-        minConfig: HandConfig(divisor: 60, snapCount: 60, knobLength: 90, knobWidth: 14, tailLength: 23),
+        secConfig:  HandConfig(divisor: 1,   snapCount: 60, knobLength: 210, knobWidth: 6,  tailLength: 40), // Im new
+        minConfig:  HandConfig(divisor: 60,  snapCount: 60, knobLength: 130, knobWidth: 12, tailLength: 20),
+        hourConfig: HandConfig(divisor: 720, snapCount: 12, knobLength: 90,  knobWidth: 14, tailLength: 20), // 12 snapping point
         smallTicks: TickConfig(radius: 172, tickCount: 60, tickLength: 12, tickWidth: 6),  // 小さい方
         largeTicks: TickConfig(radius: 161, tickCount: 12, tickLength: 34, tickWidth: 12) // 目盛り
     )
@@ -43,14 +44,15 @@ struct ContentView: View {
                         Spacer()
                         ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
                                   isSnappy: true, isTimerRunning: (timerCtrl.timer != nil))
-                        .animation(.easeInOut, value: configStore.giveBackground())
-                        .onChange(of: timerCtrl.angleValue){ _ in // 編集された を検知
-                            if timerCtrl.timer == nil{
-                                timerCtrl.isClockChanged = true
+                            .animation(.easeInOut, value: configStore.giveBackground())
+                            .onChange(of: timerCtrl.angleValue){ _ in // 編集された を検知
+                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 重い？？更新 BAD STUFF
+                                if timerCtrl.timer == nil{
+                                    timerCtrl.isClockChanged = true
+                                }
                             }
-                        }
-                        .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
-                        .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
+                            .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
+                            .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
                         Button(action: {
                             if (timerCtrl.timer == nil) {
                                 timerCtrl.isClockChanged = false
@@ -97,6 +99,9 @@ struct ContentView: View {
                     case 1: Text((timerCtrl.timer != nil) ? "\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())" : "Timer")
                     case 2: Text("Stopwatch")
                     default: Text("AnalogTimer")
+                    }
+                    Button(action: {configStore.giveRandomBgNumber()}){
+                        Image(systemName: "arrow.clockwise")
                     }
 //                    Text("Alarm: \(timerCtrl.isAlarmOn)") // 値見る用
                     Spacer()

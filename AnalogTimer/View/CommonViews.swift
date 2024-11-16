@@ -27,9 +27,28 @@ struct ClockHand: View {
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .fill(color)
         }
-        .frame(width: (config.tailLength + config.knobLength) * 2,
+        .frame(width:  (config.tailLength + config.knobLength) * 2,
                height: (config.tailLength + config.knobLength) * 2)
-        .rotationEffect(Angle.degrees(angleValue/config.divisor)) // 回転を遅くする
+        .rotationEffect(Angle.degrees(angleValue/config.divisor)) // 回転を遅くする なんでここにrotationEffect？
+    }
+}
+
+struct SecondHand: View { // 秒針 (中古ではない)
+    @Binding var angleValue: CGFloat    // 今の角度
+    var color: Color
+    let config: HandConfig
+    var body: some View {
+        ZStack{
+            // つかむところ
+            Capsule()
+                .fill(color)
+                .frame(width: config.knobWidth, height: config.knobLength)
+                .padding(15) // paddingがあると掴みやすい
+                .offset(y: -(config.knobLength / 2 - config.tailLength)) // 初期状態
+        }
+        .frame(width:  (config.knobLength - config.tailLength) * 2,
+               height: (config.knobLength - config.tailLength) * 2)
+        .rotationEffect(Angle.degrees(angleValue/config.divisor))
     }
 }
 
@@ -84,7 +103,10 @@ struct TickConfig {
 }
 
 #Preview {
-    let tickConfig = TickConfig(radius: 161, tickCount: 12, tickLength: 35, tickWidth: 12)
-    ClockTicks(config: tickConfig)
-        .border(.red, width: 5)
+//    let tickConfig = TickConfig(radius: 161, tickCount: 12, tickLength: 35, tickWidth: 12)
+//    ClockTicks(config: tickConfig)
+//        .border(.red, width: 5)
+    @StateObject var timers = TimerLogic()
+    let secConfig = HandConfig(divisor: 1, snapCount: 60, knobLength: 200, knobWidth: 7, tailLength: 40)
+    SecondHand(angleValue: $timers.angleValue, color: .red, config: secConfig)
 }

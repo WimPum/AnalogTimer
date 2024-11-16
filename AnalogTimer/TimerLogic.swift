@@ -21,7 +21,7 @@ class TimerLogic: ObservableObject{
     // sound
     var isAlarmEnabled: Bool = true // config
     private var player: AVAudioPlayer!
-    private let alarmSound = NSDataAsset(name: "Alarm")!
+    private let alarmSound = NSDataAsset(name: "Alarm")! // 音はWaves Flow Motionで作りました
     var isAlarmOn: Bool = false{
         didSet{
             guard let player else { return }
@@ -45,7 +45,7 @@ class TimerLogic: ObservableObject{
         // set start/end time
         startTime = Date()
         endTime = startTime.addingTimeInterval(angleValue/6)
-        sendNotification()
+        sendNotification() // schedules notification
         
         // prepare sound
         player = try! AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
@@ -71,8 +71,10 @@ class TimerLogic: ObservableObject{
         print("stopped timer")
         timer?.cancel()
         timer = nil
-        if isAlarmOn == true{
+        if isAlarmOn == true && angleValue <= 0{ // 終了したら
             player.play()  //再生 silentモードだとならない あとbackground再生したい
+        } else {
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests() // cancel
         }
     }
     

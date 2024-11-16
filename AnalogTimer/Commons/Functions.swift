@@ -23,6 +23,17 @@ func returnDegAngle(config: HandConfig, location: CGPoint) -> CGFloat{
     return angleFormatter360(degAngle: rad2deg(radAngle: angle))
 }
 
+// 秒針用
+func returnDegAngleSec(config: HandConfig, location: CGPoint) -> CGFloat{
+    // ベクトル化
+    let vector = CGVector(dx: location.x, dy: location.y)
+
+    // 角度算出 ここはradians
+    let angle = atan2((config.knobLength - config.tailLength) - vector.dy,
+                      (config.knobLength - config.tailLength) - vector.dx) - .pi / 2
+    return angleFormatter360(degAngle: rad2deg(radAngle: angle))
+}
+
 // ラジアン-度数法変換
 func rad2deg (radAngle: CGFloat) -> CGFloat{
     return radAngle * 180 / .pi
@@ -60,15 +71,41 @@ func angleFormatter180(degAngle: CGFloat) -> CGFloat{
     return angle
 }
 
-// 角度を0°(含む)から3600°(含まず)にする // プロシージャルなやつにしたかった
+// 角度を0°(含む)から259,200°(含まず)にする // プロシージャルなやつにしたかった
 func angleFormatterSec(degAngle: CGFloat) -> CGFloat{
+    let maxAngle: CGFloat = 259_200 // 型指定
     var angle = degAngle
-    if angle >= 21_600{
-        angle -= 21_600
+    if angle >= maxAngle{
+        angle -= maxAngle
     } else if angle < 0{
-        angle += 21_600
+        angle += maxAngle
     }
     return angle
+}
+
+func angleToTimeTop(angleValue: CGFloat) -> String{ // 上の方
+    let hours = Int(angleValue/21_600)
+    let minutes = Int((angleValue/360).truncatingRemainder(dividingBy: 60))
+    let seconds = Int((angleValue/6).truncatingRemainder(dividingBy: 60))
+    if hours <= 0{ // no need for hours
+        return  "\(String(format: "%02d", minutes)):" +
+                "\(String(format: "%02d", seconds))"
+    } else {
+        return  "\(String(format: "%02d", hours)):" +
+                "\(String(format: "%02d", minutes))"
+    }
+
+}
+
+func angleToTimeBottom(angleValue: CGFloat) -> String{ // 下の方 時間が表示されない時はなし
+    let hours = Int(angleValue/21_600)
+    let seconds = Int((angleValue/6).truncatingRemainder(dividingBy: 60))
+    if hours <= 0{ // no need for hours
+        return  "" // empty
+    } else {
+        return  "\(String(format: "%02d", seconds))"
+    }
+
 }
 
 // 触覚を発生させます
