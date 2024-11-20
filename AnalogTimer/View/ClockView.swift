@@ -8,6 +8,7 @@
 import SwiftUI
 
 // ClockView
+// 見た目を良くします
 struct ClockView: View{
     @EnvironmentObject var configStore: SettingsStore // EnvironmentObjになった設定
     
@@ -17,7 +18,6 @@ struct ClockView: View{
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
     @State private var isHourDragging: Bool = false
-    
     let clockConfig: ClockViewConfig
     
     // settings
@@ -26,19 +26,20 @@ struct ClockView: View{
 
     var body: some View{
         ZStack(){
-            Text(angleToTimeTop(angleValue: angleValue))
-                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 80, weight: .light))) // 等幅モード！！
-                .foregroundStyle(Color.white)
-                .padding()
-            Text(angleToTimeBottom(angleValue: angleValue)) // shows seconds when timer goes longer than 1h
-                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 45, weight: .light)))
-                .foregroundStyle(Color.white)
-                .padding(.top, 130)
+//            Text(angleToTimeTop(angleValue: angleValue))
+//                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 80, weight: .light))) // 等幅モード！！
+//                .foregroundStyle(Color.white)
+//                .padding()
+//            Text(angleToTimeBottom(angleValue: angleValue)) // shows seconds when timer goes longer than 1h
+//                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 45, weight: .light)))
+//                .foregroundStyle(Color.white)
+//                .padding(.top, 130)
             ClockTicks(config: clockConfig.smallTicks) // 小さい方
             ClockTicks(config: clockConfig.largeTicks) // 目盛り
+            RadialNumber(config: clockConfig.radialNums)
             
             // 秒針
-            SecondHand(angleValue: $angleValue, color: .blue, config: clockConfig.secConfig)
+            SecondHand(angleValue: $angleValue, color: .orange, config: clockConfig.secConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -65,7 +66,7 @@ struct ClockView: View{
                 )
             
             // 分針
-            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[0], config: clockConfig.minConfig)
+            ClockHand(angleValue: $angleValue, color: .white, config: clockConfig.minConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -92,7 +93,7 @@ struct ClockView: View{
                 )
             
             // 短針
-            ClockHand(angleValue: $angleValue, color: configStore.giveHandColors()[1], config: clockConfig.hourConfig)
+            ClockHand(angleValue: $angleValue, color: .white, config: clockConfig.hourConfig)
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -117,13 +118,13 @@ struct ClockView: View{
                             previousAngle = nil
                         }
                 )
-
+            Circle()
+                .fill(.white)
+                .frame(width: 18, height: 18)
             Circle()
                 .fill(.black)
-                .frame(width: 20, height: 20)
-            Circle()
-                .fill(configStore.giveHandColors()[1])
-                .frame(width: 8, height: 8)
+                .frame(width: 7, height: 7)
+//            Slider(value: $cornerRadius, in: 0...30)
         }
         .frame(height: 300)
         .onChange(of: angleValue) { _ in
@@ -133,21 +134,23 @@ struct ClockView: View{
 }
 
 struct ClockViewConfig {
-    let secConfig: HandConfig  // New
-    let minConfig: HandConfig  // 今までのsecConfigがこっち
+    let secConfig:  HandConfig  // New
+    let minConfig:  HandConfig  // 今までのsecConfigがこっち
     let hourConfig: HandConfig // 今までのminConfigがこっち
     let smallTicks: TickConfig
     let largeTicks: TickConfig
+    let radialNums: RadiConfig
 }
 
 #Preview{
     @StateObject var timers = TimerLogic()
     let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
-        secConfig:  HandConfig(divisor: 1,   snapCount: 60, knobLength: 210, knobWidth: 6,  tailLength: 40),
-        minConfig:  HandConfig(divisor: 60,  snapCount: 60, knobLength: 130, knobWidth: 12, tailLength: 20),
-        hourConfig: HandConfig(divisor: 720, snapCount: 12, knobLength: 90,  knobWidth: 14, tailLength: 20),
-        smallTicks: TickConfig(radius: 172, tickCount: 60, tickLength: 12, tickWidth: 6),  // 小さい方
-        largeTicks: TickConfig(radius: 161, tickCount: 12, tickLength: 34, tickWidth: 12) // 目盛り
+        secConfig:  HandConfig(knobWidth: 6,  knobLength: 210, tailLength: 40, snapCount: 60, cornerRadius: 3, divisor: 1), // Im new
+        minConfig:  HandConfig(knobWidth: 12, knobLength: 130, tailLength: 20, snapCount: 60, cornerRadius: 6, divisor: 60),
+        hourConfig: HandConfig(knobWidth: 14, knobLength: 90,  tailLength: 20, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
+        smallTicks: TickConfig(tickWidth: 6,  tickLength: 12, radius: 178, tickCount: 60, cornerRadius: 3),  // 小さい方
+        largeTicks: TickConfig(tickWidth: 12, tickLength: 34, radius: 178, tickCount: 12, cornerRadius: 6), // 目盛り
+        radialNums: RadiConfig(fontSize: 30, radius: 120, count: 12)
     )
     ClockView(angleValue: $timers.angleValue, clockConfig: clockConfig,
               isSnappy: true, isTimerRunning: false)

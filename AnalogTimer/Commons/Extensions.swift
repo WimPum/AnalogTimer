@@ -29,32 +29,32 @@ extension View {
     }
     
     //色とかフォント スタイル
-    func fontLight(size: Int) -> some View {
+    func fontLight(size: CGFloat) -> some View {
         self
-            .font(.system(size: CGFloat(size), weight: .light, design: .default))
+            .font(.system(size: size, weight: .light, design: .default))
             .foregroundStyle(.white)
     }
-    func fontMedium(size: Int) -> some View {
+    func fontMedium(size: CGFloat) -> some View {
         self
-            .font(.system(size: CGFloat(size), weight: .medium, design: .default))
+            .font(.system(size: size, weight: .medium, design: .default))
             .foregroundColor(.white)
     }
-    func fontSemiBold(size: Int) -> some View {
+    func fontSemiBold(size: CGFloat) -> some View {
         self
-            .font(.system(size: CGFloat(size), weight: .semibold, design: .default))
+            .font(.system(size: size, weight: .semibold, design: .default))
             .foregroundColor(.white)
     }
     
     // ロール中に半透明(ロール中です！！という効果) 選んだ番号の表示用
-    func fontSemiBoldRound(size: Int, rolling: Bool) -> some View {
+    func fontSemiBoldRound(size: CGFloat, rolling: Bool) -> some View {
         if rolling == true{
             return self
-                .font(.system(size: CGFloat(size), weight: .semibold, design: .rounded))
+                .font(.system(size: size, weight: .semibold, design: .rounded))
                 .foregroundColor(.white)
                 .opacity(0.4)
         }else{
             return self
-                .font(.system(size: CGFloat(size), weight: .semibold, design: .rounded))
+                .font(.system(size: size, weight: .semibold, design: .rounded))
                 .foregroundColor(.white)
                 .opacity(1)
             }

@@ -17,25 +17,22 @@ struct ContentView: View {
     @State private var isSettingsView: Bool = false//設定画面を開く用
     
     let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
-        secConfig:  HandConfig(divisor: 1,   snapCount: 60, knobLength: 210, knobWidth: 6,  tailLength: 40), // Im new
-        minConfig:  HandConfig(divisor: 60,  snapCount: 60, knobLength: 130, knobWidth: 12, tailLength: 20),
-        hourConfig: HandConfig(divisor: 720, snapCount: 12, knobLength: 90,  knobWidth: 14, tailLength: 20), // 12 snapping point
-        smallTicks: TickConfig(radius: 172, tickCount: 60, tickLength: 12, tickWidth: 6),  // 小さい方
-        largeTicks: TickConfig(radius: 161, tickCount: 12, tickLength: 34, tickWidth: 12) // 目盛り
+//        secConfig:  HandConfig(knobWidth: 6,  knobLength: 210, tailLength: 40, snapCount: 60, cornerRadius: 3, divisor: 1), // Im new
+//        minConfig:  HandConfig(knobWidth: 12, knobLength: 130, tailLength: 20, snapCount: 60, cornerRadius: 6, divisor: 60),
+//        hourConfig: HandConfig(knobWidth: 14, knobLength: 90,  tailLength: 20, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
+//        smallTicks: TickConfig(tickWidth: 6,  tickLength: 12, radius: 178, tickCount: 60, cornerRadius: 3),  // 小さい方
+//        largeTicks: TickConfig(tickWidth: 12, tickLength: 34, radius: 178, tickCount: 12, cornerRadius: 6), // 目盛り
+//        radialNums: RadiConfig(fontSize: 0, radius: 150, count: 12)
+        secConfig:  HandConfig(knobWidth: 5,  knobLength: 210, tailLength: 30, snapCount: 60, cornerRadius: 2, divisor: 1), // Im new
+        minConfig:  HandConfig(knobWidth: 12, knobLength: 140, tailLength: 24, snapCount: 60, cornerRadius: 6, divisor: 60),
+        hourConfig: HandConfig(knobWidth: 14, knobLength: 80,  tailLength: 24, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
+        smallTicks: TickConfig(tickWidth: 2,  tickLength: 12, radius: 180, tickCount: 60, cornerRadius: 0),  // 小さい方
+        largeTicks: TickConfig(tickWidth: 7,  tickLength: 12, radius: 180, tickCount: 12, cornerRadius: 0), // 目盛り
+        radialNums: RadiConfig(fontSize: 48, radius: 158, count: 12)
     )
     
     var body: some View {
         ZStack {
-            if #available(iOS 17, *){
-                LinearGradient(gradient: Gradient(colors: configStore.giveBackground()),
-                               startPoint: .top, endPoint: .bottom)
-                    .edgesIgnoringSafeArea(.all)
-                    .animation(.easeInOut, value: configStore.giveBackground())
-            } else {
-                AnimGradient(gradient: Gradient(colors: configStore.giveBackground()))
-                    .edgesIgnoringSafeArea(.all)
-                    .animation(.easeInOut, value: configStore.giveBackground())
-            }
             // portrait, landscapeの自動切り替え
             TabView(selection: $viewSelection){
                 //MARK: 1ページ目
@@ -44,7 +41,6 @@ struct ContentView: View {
                         Spacer()
                         ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
                                   isSnappy: true, isTimerRunning: (timerCtrl.timer != nil))
-                            .animation(.easeInOut, value: configStore.giveBackground())
                             .onChange(of: timerCtrl.angleValue){ _ in // 編集された を検知
                                 timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 重い？？更新 BAD STUFF
                                 if timerCtrl.timer == nil{
@@ -78,19 +74,23 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
+//                .background(Gradient(colors: [Color.black, Color.teal]))
+                    .background(Color.black)
                     .tabItem {
                         Image(systemName: "timer")
-                        Text("Main") }
+                        Text("Timer") }
                     .tag(1)
                 
                 //MARK: 2ページ目
-                Text("Hello, World!")
+                VStack{
+                    Text("Hello, World!")
+                }
+                    .background(Color.black)
                     .tabItem {
                         Image(systemName: "stopwatch.fill")
-                        Text("History") }
+                        Text("Stopwatch") }
                     .tag(2)
             }
-            .tabViewStyle(.page(indexDisplayMode: .automatic)) // https://stackoverflow.com/questions/68310455/
             // Upper buttons
             VStack(){
                 Spacer().frame(height: 5)
@@ -99,9 +99,6 @@ struct ContentView: View {
                     case 1: Text((timerCtrl.timer != nil) ? "\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())" : "Timer")
                     case 2: Text("Stopwatch")
                     default: Text("AnalogTimer")
-                    }
-                    Button(action: {configStore.giveRandomBgNumber()}){
-                        Image(systemName: "arrow.clockwise")
                     }
 //                    Text("Alarm: \(timerCtrl.isAlarmOn)") // 値見る用
                     Spacer()
@@ -119,10 +116,6 @@ struct ContentView: View {
                 .sheetDetents()
         }
         .onAppear{//起動時に一回だけ実行となる このContentViewしかないから
-            if configStore.configBgNumber > configStore.colorList.count-1{ // crash guard
-                configStore.configBgNumber = 20 // hardcoded
-            }
-            configStore.giveRandomBgNumber()
             timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 更新
             
             // 1 checking for permission

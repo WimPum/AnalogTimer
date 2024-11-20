@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AboutView: View {
-    @EnvironmentObject var configStore: SettingsStore
+//    @EnvironmentObject var configStore: SettingsStore
     @Binding var isPresented: Bool
     
     // アプリバージョン
@@ -27,8 +27,8 @@ struct AboutView: View {
             Link("MIT License", destination: URL(string: "https://opensource.org/license/mit")!).padding(1)
             Link("feedback", destination: URL(string: "https://forms.gle/aYxcCUKScGAzcp9Q6")!).padding(1)
             HStack{
-                Link("Website", destination: URL(string: "https://wimpum.github.io/Stuffs.html")!).padding(1)
-                Link("View code on GitHub", destination: URL(string: "https://github.com/WimPum/AnalogTimer")!).padding(1)
+                Link("Website", destination: URL(string: "https://ulyssas.github.io/Stuffs.html")!).padding(1)
+                Link("View code on GitHub", destination: URL(string: "https://github.com/ulyssas/AnalogTimer")!).padding(1)
             }
             Spacer()
         }.toolbar {

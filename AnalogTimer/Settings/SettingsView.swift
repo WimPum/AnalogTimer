@@ -36,8 +36,7 @@ struct SettingsView: View { // will be called from ContentView
                     }
                 }
             }
-        }
-        else {
+        } else {
             NavigationView{//iOS 15用
                 Form{
                     SettingsList()
@@ -72,18 +71,7 @@ struct SettingsList: View{
     var body: some View {
         Section(header: Text("general")){
             Toggle("Haptics", isOn: $configStore.isHapticsOn)
-//            Toggle("Enable snapping", isOn: $configStore.isSnappEnabled)
             Toggle("Enable Alarm", isOn: $configStore.isAlarmEnabled)
-            Picker("Background color", selection: $configStore.configBgNumber){ // selectionにはid(string)が含まれる。
-                ForEach(0..<configStore.colorList.count, id: \.self) { index in
-                    Text(LocalizedStringKey(configStore.colorList[index].name))
-                }
-            }
-            .onChange(of: configStore.configBgNumber) { _ in
-                withAnimation(){
-                    configStore.giveRandomBgNumber()
-                }
-            }
             Button("Reset setting", action:{
                 configStore.resetSettings()
             })
