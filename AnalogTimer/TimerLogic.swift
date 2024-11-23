@@ -14,12 +14,11 @@ class TimerLogic: ObservableObject{
     // timer
     @Published var timer: AnyCancellable? // 実際のタイマー
     @Published var angleValue: CGFloat = 0.0
-    @Published var isClockChanged: Bool = false // タイマー画面が変更された(回されたかどうか)
     var startTime: Date = Date()
     var endTime: Date = Date()
     
     // sound
-    var isAlarmEnabled: Bool = true // config
+    @Published var isAlarmEnabled: Bool = true // config
     private var player: AVAudioPlayer!
     private let alarmSound = NSDataAsset(name: "Alarm")! // 音はWaves Flow Motionで作りました
     var isAlarmOn: Bool = false{
@@ -99,5 +98,44 @@ class TimerLogic: ObservableObject{
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
+    }
+}
+
+
+// Stopwatch
+class StopwatchLogic: ObservableObject{
+    // timer
+    @Published var timer: AnyCancellable? // 実際のタイマー
+    @Published var angleValue: CGFloat = 0.0
+    var startAngle: CGFloat = 0.0
+    var startTime: Date = Date()
+    
+    func startTimer(interval: Double) { // limitはminuteで設定する
+        // 呼び出し時の処理
+        if let _timer = timer{ // もし開始時にタイマーが存在したら消す
+            _timer.cancel()
+        }
+        
+        // set start/end time
+        startTime = Date()
+        startAngle = angleValue
+        
+        // タイマー宣言
+        timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
+            .autoconnect()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: ({ value in
+                self.angleValue = self.startAngle - self.startTime.timeIntervalSinceNow * 6 // 反対だから
+//                if self.angleValue <= 0 { // タイマー終了
+//                    self.angleValue = 0 // clippit!!
+//                    self.stopTimer()
+//                }
+            }))
+    }
+
+    func stopTimer() { // タイマー止めます
+        print("stopped timer")
+        timer?.cancel()
+        timer = nil
     }
 }

@@ -392,6 +392,7 @@
       }
     },
     "Hello, World!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -752,6 +753,16 @@
         }
       }
     },
+    "Start %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始 %@"
+          }
+        }
+      }
+    },
     "Start Timer %@" : {
       "localizations" : {
         "en" : {
@@ -764,6 +775,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "スタート %@"
+          }
+        }
+      }
+    },
+    "Stop %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止 %@"
           }
         }
       }

@@ -122,6 +122,17 @@ struct RadialNumber: View {
     }
 }
 
+struct DigitalTimer: View {
+    let config: DigiConfig
+    @Binding var angleValue: CGFloat
+    var body: some View {
+        Text(angleToTime(angleValue: angleValue))
+            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: config.fontSize, weight: .light))) // 等幅モード！！
+            .foregroundStyle(Color.white)
+            .offset(x: 0, y: config.offset) // 時計の中心からの距離
+    }
+}
+
 struct HandConfig { // 位置とか設定
     let knobWidth:  CGFloat  // 幅
     let knobLength: CGFloat // 長さ
@@ -143,6 +154,11 @@ struct RadiConfig {
     let fontSize: CGFloat
     let radius: CGFloat
     let count: Int // 目盛りの総数
+}
+
+struct DigiConfig {
+    let fontSize: CGFloat
+    let offset: CGFloat
 }
 
 #Preview {

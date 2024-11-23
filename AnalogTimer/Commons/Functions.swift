@@ -85,29 +85,13 @@ func angleFormatterSec(degAngle: CGFloat) -> CGFloat{
     return angle
 }
 
-func angleToTimeTop(angleValue: CGFloat) -> String{ // 上の方
+func angleToTime(angleValue: CGFloat) -> String{ // 上の方
     let hours = Int(angleValue/21_600)
     let minutes = Int((angleValue/360).truncatingRemainder(dividingBy: 60))
     let seconds = Int((angleValue/6).truncatingRemainder(dividingBy: 60))
-    if hours <= 0{ // no need for hours
-        return  "\(String(format: "%02d", minutes)):" +
-                "\(String(format: "%02d", seconds))"
-    } else {
-        return  "\(String(format: "%02d", hours)):" +
-                "\(String(format: "%02d", minutes))"
-    }
-
-}
-
-func angleToTimeBottom(angleValue: CGFloat) -> String{ // 下の方 時間が表示されない時はなし
-    let hours = Int(angleValue/21_600)
-    let seconds = Int((angleValue/6).truncatingRemainder(dividingBy: 60))
-    if hours <= 0{ // no need for hours
-        return  "" // empty
-    } else {
-        return  "\(String(format: "%02d", seconds))"
-    }
-
+    return  "\(String(format: "%02d", hours)):" +
+            "\(String(format: "%02d", minutes)):" +
+            "\(String(format: "%02d", seconds))"
 }
 
 // 触覚を発生させます

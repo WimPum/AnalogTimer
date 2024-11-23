@@ -8,7 +8,7 @@
 import SwiftUI
 
 // ClockView
-// 見た目を良くします
+// 下にsmallなDigitalTimerを追加
 struct ClockView: View{
     @EnvironmentObject var configStore: SettingsStore // EnvironmentObjになった設定
     
@@ -26,16 +26,10 @@ struct ClockView: View{
 
     var body: some View{
         ZStack(){
-//            Text(angleToTimeTop(angleValue: angleValue))
-//                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 80, weight: .light))) // 等幅モード！！
-//                .foregroundStyle(Color.white)
-//                .padding()
-//            Text(angleToTimeBottom(angleValue: angleValue)) // shows seconds when timer goes longer than 1h
-//                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 45, weight: .light)))
-//                .foregroundStyle(Color.white)
-//                .padding(.top, 130)
-            ClockTicks(config: clockConfig.smallTicks) // 小さい方
-            ClockTicks(config: clockConfig.largeTicks) // 目盛り
+
+            DigitalTimer(config: clockConfig.digiTimers, angleValue: $angleValue)
+            ClockTicks(config:   clockConfig.smallTicks) // 小さい方
+            ClockTicks(config:   clockConfig.largeTicks) // 目盛り
             RadialNumber(config: clockConfig.radialNums)
             
             // 秒針
@@ -140,6 +134,7 @@ struct ClockViewConfig {
     let smallTicks: TickConfig
     let largeTicks: TickConfig
     let radialNums: RadiConfig
+    let digiTimers: DigiConfig
 }
 
 #Preview{
@@ -150,7 +145,8 @@ struct ClockViewConfig {
         hourConfig: HandConfig(knobWidth: 14, knobLength: 90,  tailLength: 20, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
         smallTicks: TickConfig(tickWidth: 6,  tickLength: 12, radius: 178, tickCount: 60, cornerRadius: 3),  // 小さい方
         largeTicks: TickConfig(tickWidth: 12, tickLength: 34, radius: 178, tickCount: 12, cornerRadius: 6), // 目盛り
-        radialNums: RadiConfig(fontSize: 30, radius: 120, count: 12)
+        radialNums: RadiConfig(fontSize: 0, radius: 120, count: 12),
+        digiTimers: DigiConfig(fontSize: 35, offset: 80)
     )
     ClockView(angleValue: $timers.angleValue, clockConfig: clockConfig,
               isSnappy: true, isTimerRunning: false)

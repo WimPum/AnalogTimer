@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct AnalogTimerApp: App {
     @StateObject var timers = TimerLogic()
+    @StateObject var stopws = StopwatchLogic()
     @StateObject var config = SettingsStore()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(timers)
+                .environmentObject(stopws)
                 .environmentObject(config)
         }
     }
