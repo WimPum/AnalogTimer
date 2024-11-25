@@ -14,7 +14,7 @@ struct ContentView: View {
     @EnvironmentObject var configStore: SettingsStore
     
     //misc
-    @State private var viewSelection = 2    //ページを切り替える用
+    @State private var viewSelection = 1    //ページを切り替える用
     @State private var isSettingsView: Bool = false//設定画面を開く用
     
     let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
@@ -47,8 +47,8 @@ struct ContentView: View {
                         Spacer()
                         ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
                                   isSnappy: true, isTimerRunning: (timerCtrl.timer != nil))
-                            .onChange(of: timerCtrl.angleValue){ _ in // 編集された を検知
-                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 重い？？更新 BAD STUFF
+                            .onChange(of: configStore.isAlarmEnabled){ _ in // 編集された を検知
+                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled
                             }
                             .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
                             .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
@@ -94,7 +94,8 @@ struct ContentView: View {
                     DynamicStack{ // best of both worlds!!
                         Spacer()
                         ClockView(angleValue: $stopwatchCtrl.angleValue, clockConfig: clockOldConfig,
-                                  isSnappy: true, isTimerRunning: (stopwatchCtrl.timer != nil))
+                                  isSnappy: true, isTimerRunning: true) // 操作できません(isTimerRunning)
+                            .animation((stopwatchCtrl.timer != nil) ? nil : .spring, value: stopwatchCtrl.angleValue)
                             .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
                             .scaleEffect(min(g.size.width, g.size.height)/(clockOldConfig.smallTicks.radius * 2 + clockOldConfig.smallTicks.tickLength) * 0.9)
                         Button(action: {
@@ -133,10 +134,18 @@ struct ContentView: View {
                     case 2: Text("Stopwatch")
                     default: Text("AnalogTimer")
                     }
-//                    Text("Alarm: \(timerCtrl.isAlarmOn)") // 値見る用
                     Spacer()
+                    if viewSelection == 2 {
+                        Button(action: {
+                            if stopwatchCtrl.timer == nil {
+                                stopwatchCtrl.angleValue = 0
+                            }
+                        }){
+                            Image(systemName: "arrow.clockwise").padding(.horizontal, 12.0)
+                        }
+                    }
                     Button(action: {self.isSettingsView.toggle()}){
-                        Image(systemName: "gearshape.fill")//.padding(12)
+                        Image(systemName: "gearshape.fill")
                     }
                 }.padding(.horizontal, 12)
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
@@ -151,15 +160,7 @@ struct ContentView: View {
         }
         .onAppear{//起動時に一回だけ実行となる このContentViewしかないから
             timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 更新
-            
-            // 1 checking for permission
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                if success {
-                    print("Permission approved!")
-                } else if let error = error {
-                    print(error.localizedDescription)
-                }
-            }
+            UIApplication.shared.isIdleTimerDisabled = true // Caffeine
         }
     }
 }

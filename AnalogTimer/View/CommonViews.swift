@@ -122,9 +122,16 @@ struct RadialNumber: View {
     }
 }
 
-struct DigitalTimer: View {
+struct DigitalTimer: View, Animatable {
     let config: DigiConfig
-    @Binding var angleValue: CGFloat
+    var angleValue: CGFloat
+    
+    // Animation
+    var animatableData: CGFloat{
+        get { angleValue }
+        set { angleValue = newValue }
+    }
+    
     var body: some View {
         Text(angleToTime(angleValue: angleValue))
             .font(Font(UIFont.monospacedDigitSystemFont(ofSize: config.fontSize, weight: .light))) // 等幅モード！！

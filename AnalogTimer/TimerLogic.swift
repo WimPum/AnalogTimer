@@ -23,13 +23,21 @@ class TimerLogic: ObservableObject{
     private let alarmSound = NSDataAsset(name: "Alarm")! // 音はWaves Flow Motionで作りました
     var isAlarmOn: Bool = false{
         didSet{
-            guard let player else { return }
-            if isAlarmOn == false{ // falseになったら
-                player.stop() // pauseより滑らかじゃないけどいい
+            if isAlarmOn { // 終了したら
+                playAudio()
+            } else if player != nil{ // falseになったら
+                stopAudio()
+                removeNotification()
             }
         }
     }
     
+    init(){
+        configureAudioSession()
+        configureNotification()
+    }
+    
+    // MARK: Timer
     func startTimer(interval: Double) { // limitはminuteで設定する
         // always stop alarm when startTimer was called
         isAlarmOn = false
@@ -46,10 +54,6 @@ class TimerLogic: ObservableObject{
         endTime = startTime.addingTimeInterval(angleValue/6)
         sendNotification() // schedules notification
         
-        // prepare sound
-        player = try! AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
-        player.numberOfLoops = -1 //ループ回数して、-1で無限ループ
-        
         // タイマー宣言
         timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
             .autoconnect()
@@ -59,7 +63,7 @@ class TimerLogic: ObservableObject{
                 if self.angleValue <= 0 { // タイマー終了
                     self.angleValue = 0 // clippit!!
                     if self.isAlarmEnabled == true{
-                        self.isAlarmOn = true
+                        self.isAlarmOn = true // ここで鳴ります
                     }
                     self.stopTimer()
                 }
@@ -70,11 +74,60 @@ class TimerLogic: ObservableObject{
         print("stopped timer")
         timer?.cancel()
         timer = nil
-        if isAlarmOn == true && angleValue <= 0{ // 終了したら
-            player.play()  //再生 silentモードだとならない あとbackground再生したい
-        } else {
-            UNUserNotificationCenter.current().removeAllPendingNotificationRequests() // cancel
+    }
+    
+    // MARK: Audio
+    func configureAudioSession(){
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playback, mode: .default, options: .mixWithOthers)
+            try audioSession.setActive(true)
+        } catch {
+            print("error: \(error)")
         }
+    }
+    
+    //再生 silentモードだとならない あとbackground再生したい
+    func playAudio(){
+        // prepare sound
+        print("here!!")
+        player = try! AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
+        player.numberOfLoops = -1 //ループ回数して、-1で無限ループ
+        player.play()
+    }
+    
+    func stopAudio(){
+        player.stop() // pauseより滑らかじゃないけどいい
+    }
+    
+    // MARK: Notification
+    func configureNotification(){
+        // 1 checking for permission
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                print("Permission approved!")
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func sendNotification(){
+        let notification = UNMutableNotificationContent()
+        notification.title = "AnalogTimer"
+        notification.body = "Timer has reached zero at \(returnEndTime())"
+        notification.sound = .default
+        
+        // いつ？
+        let components = Calendar.current.dateComponents([.calendar, .hour, .minute, .second], from: endTime)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    func removeNotification(){
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests() // cancel
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications() // delete
     }
     
     func formattedTime(Date: Date) -> String{
@@ -86,21 +139,23 @@ class TimerLogic: ObservableObject{
     func returnEndTime() -> String{
         return formattedTime(Date: endTime)
     }
-    
-    func sendNotification(){
-        let notification = UNMutableNotificationContent()
-        notification.title = "AnalogTimer"
-        notification.body = "Timer has reached zero at \(returnEndTime())"
-        notification.sound = .default // 是非とも変えたいところです
-        
-        // いつ？
-        let components = Calendar.current.dateComponents([.calendar, .hour, .minute, .second], from: endTime)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: notification, trigger: trigger)
-        UNUserNotificationCenter.current().add(request)
-    }
 }
-
+//
+//class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+//    var TimerLogic: TimerLogic
+//    init(TimerLogic: TimerLogic) {
+//        self.TimerLogic = TimerLogic
+//    }
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        completionHandler([.badge, .sound])
+//    }
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+//        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
+//            TimerLogic.isAlarmOn = false // 通知が消されたら止める。
+//        }
+//        completionHandler()
+//    }
+//}
 
 // Stopwatch
 class StopwatchLogic: ObservableObject{
@@ -126,10 +181,6 @@ class StopwatchLogic: ObservableObject{
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: ({ value in
                 self.angleValue = self.startAngle - self.startTime.timeIntervalSinceNow * 6 // 反対だから
-//                if self.angleValue <= 0 { // タイマー終了
-//                    self.angleValue = 0 // clippit!!
-//                    self.stopTimer()
-//                }
             }))
     }
 

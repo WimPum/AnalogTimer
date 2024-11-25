@@ -10,7 +10,8 @@ import SwiftUI
 // ClockView
 // 下にsmallなDigitalTimerを追加
 struct ClockView: View{
-    @EnvironmentObject var configStore: SettingsStore // EnvironmentObjになった設定
+    // Global settings
+    @EnvironmentObject var configStore: SettingsStore
     
     // values
     @Binding var angleValue: CGFloat     // 角度の値 360°を超えていく 1秒は6° つまりangleValue/6=seconds
@@ -18,6 +19,8 @@ struct ClockView: View{
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
     @State private var isHourDragging: Bool = false
+    
+    // design
     let clockConfig: ClockViewConfig
     
     // settings
@@ -26,8 +29,7 @@ struct ClockView: View{
 
     var body: some View{
         ZStack(){
-
-            DigitalTimer(config: clockConfig.digiTimers, angleValue: $angleValue)
+            DigitalTimer(config: clockConfig.digiTimers, angleValue: angleValue)
             ClockTicks(config:   clockConfig.smallTicks) // 小さい方
             ClockTicks(config:   clockConfig.largeTicks) // 目盛り
             RadialNumber(config: clockConfig.radialNums)
@@ -118,7 +120,6 @@ struct ClockView: View{
             Circle()
                 .fill(.black)
                 .frame(width: 7, height: 7)
-//            Slider(value: $cornerRadius, in: 0...30)
         }
         .frame(height: 300)
         .onChange(of: angleValue) { _ in

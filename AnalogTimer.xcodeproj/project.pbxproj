@@ -43,6 +43,7 @@
 		B1A326E52CD9104900D3C934 /* limitedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = limitedTextField.swift; sourceTree = "<group>"; };
 		B1A326E62CD9104900D3C934 /* AnimGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimGradient.swift; sourceTree = "<group>"; };
 		B1A3270B2CDB45CF00D3C934 /* DynamicStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicStack.swift; sourceTree = "<group>"; };
+		B1DDA7072CF4564B00DA22F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B1E876E12C01AFD100810D85 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		B1F38ADB2CDE5CA20082BD01 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -85,6 +86,7 @@
 		B15D3AEE2BC1EFBD00118FAB /* AnalogTimer */ = {
 			isa = PBXGroup;
 			children = (
+				B1DDA7072CF4564B00DA22F8 /* Info.plist */,
 				B1A326D92CD90AAD00D3C934 /* Settings */,
 				B1A326DF2CD90AB400D3C934 /* View */,
 				B1A326CC2CD9078400D3C934 /* Commons */,
@@ -360,6 +362,7 @@
 				DEVELOPMENT_TEAM = 245AVHR596;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AnalogTimer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AnalogTimer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -397,6 +400,7 @@
 				DEVELOPMENT_TEAM = 245AVHR596;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AnalogTimer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AnalogTimer;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

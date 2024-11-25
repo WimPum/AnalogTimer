@@ -21,9 +21,8 @@ extension View {
     
     func sheetDetents() -> some View {
         if #available(iOS 16.0, *) {//iOS16以降ならこっちでリスト透明化
-            return self.presentationDetents([.medium])
+            return self.presentationDetents([.medium, .large])
         } else {
-//            UITableView.appearance().backgroundColor = UIColor(.clear)
             return self
         }
     }
