@@ -10,12 +10,23 @@ import Combine
 import AVFoundation
 import UserNotifications
 
-class TimerLogic: ObservableObject{
+// 参考:
+// https://qiita.com/scream_episode/items/8d42198698fcf7513b54
+// https://github.com/yimajo/CountdownRing/
+// https://digitalbunker.dev/recreating-the-ios-timer-in-swiftui/
+
+// MARK: TimerLogic
+final class TimerLogic: ObservableObject{
     // timer
     @Published var timer: AnyCancellable? // 実際のタイマー
-    @Published var angleValue: CGFloat = 0.0
-    var startTime: Date = Date()
-    var endTime: Date = Date()
+    @Published var angleValue: CGFloat = 0.0 // 残り時間は全てこれで管理
+    @AppStorage("isTimerActive") private var isTimerActive: Bool = false // タイマーは初めは存在しない
+    let interval = 0.1 // theres not enough precision
+    
+    // Date
+    private var startTime: Date = Date()
+    private var endTime: Date = Date()
+    @AppStorage("endTimeInterval") private var endTimeInterval: Double = 0.0 // ここから復活
     
     // sound
     @Published var isAlarmEnabled: Bool = true // config
@@ -33,14 +44,26 @@ class TimerLogic: ObservableObject{
     }
     
     init(){
+        print("Hey its me TIMER!!")
         configureAudioSession()
         configureNotification()
+        if isTimerActive == true{
+            print("here!")
+            endTime = Date(timeIntervalSince1970: endTimeInterval) // 復活する このendTime
+            if endTime > Date.now { // タイマー終わってない
+                let remainingTime = endTime.timeIntervalSinceNow // remaining time
+                angleValue = remainingTime * 6
+                startTimer()
+            }
+        }
     }
     
     // MARK: Timer
-    func startTimer(interval: Double) { // limitはminuteで設定する
+    func startTimer() { // limitはminuteで設定する
         // always stop alarm when startTimer was called
         isAlarmOn = false
+        removeNotification()
+        print("TIMER: Started ▶️")
         
         // 呼び出し時の処理
         if let _timer = timer{ // もし開始時にタイマーが存在したら消す
@@ -52,27 +75,35 @@ class TimerLogic: ObservableObject{
         // set start/end time
         startTime = Date()
         endTime = startTime.addingTimeInterval(angleValue/6)
+        endTimeInterval = endTime.timeIntervalSince1970 // 1970/1/1 を基準に
         sendNotification() // schedules notification
+        isTimerActive = true // timer running now!
         
         // タイマー宣言
         timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
             .autoconnect()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: ({ value in
-                self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 6で割ったりかけたりしすぎ？
-                if self.angleValue <= 0 { // タイマー終了
+//            .prepend(Date())
+            .sink { [weak self] _ in
+                // MARK: Issue1
+                guard let self else { return }
+                self.angleValue = (self.endTime.timeIntervalSinceNow) * 6 // "interval" second late
+                
+                if self.angleValue < 0 { // タイマー終了
                     self.angleValue = 0 // clippit!!
                     if self.isAlarmEnabled == true{
                         self.isAlarmOn = true // ここで鳴ります
                     }
                     self.stopTimer()
                 }
-            }))
+            }
     }
 
     func stopTimer() { // タイマー止めます
-        print("stopped timer")
+        print("TIMER: Stopped ⏸️")
         timer?.cancel()
+        removeNotification()
+//        self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 多分これが重たい
+        isTimerActive = false // timer cancelled
         timer = nil
     }
     
@@ -89,8 +120,6 @@ class TimerLogic: ObservableObject{
     
     //再生 silentモードだとならない あとbackground再生したい
     func playAudio(){
-        // prepare sound
-        print("here!!")
         player = try! AVAudioPlayer(data: alarmSound.data, fileTypeHint: "wav")
         player.numberOfLoops = -1 //ループ回数して、-1で無限ループ
         player.play()
@@ -138,55 +167,5 @@ class TimerLogic: ObservableObject{
     
     func returnEndTime() -> String{
         return formattedTime(Date: endTime)
-    }
-}
-//
-//class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
-//    var TimerLogic: TimerLogic
-//    init(TimerLogic: TimerLogic) {
-//        self.TimerLogic = TimerLogic
-//    }
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-//        completionHandler([.badge, .sound])
-//    }
-//    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-//        if response.actionIdentifier == UNNotificationDismissActionIdentifier {
-//            TimerLogic.isAlarmOn = false // 通知が消されたら止める。
-//        }
-//        completionHandler()
-//    }
-//}
-
-// Stopwatch
-class StopwatchLogic: ObservableObject{
-    // timer
-    @Published var timer: AnyCancellable? // 実際のタイマー
-    @Published var angleValue: CGFloat = 0.0
-    var startAngle: CGFloat = 0.0
-    var startTime: Date = Date()
-    
-    func startTimer(interval: Double) { // limitはminuteで設定する
-        // 呼び出し時の処理
-        if let _timer = timer{ // もし開始時にタイマーが存在したら消す
-            _timer.cancel()
-        }
-        
-        // set start/end time
-        startTime = Date()
-        startAngle = angleValue
-        
-        // タイマー宣言
-        timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
-            .autoconnect()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: ({ value in
-                self.angleValue = self.startAngle - self.startTime.timeIntervalSinceNow * 6 // 反対だから
-            }))
-    }
-
-    func stopTimer() { // タイマー止めます
-        print("stopped timer")
-        timer?.cancel()
-        timer = nil
     }
 }

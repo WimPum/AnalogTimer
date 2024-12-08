@@ -12,52 +12,25 @@ struct SettingsView: View { // will be called from ContentView
     @Binding var isPresentedLocal: Bool
     
     var body: some View {
-        if #available(iOS 16.0, *) {
-            NavigationStack {
-                Form{
-                    SettingsList()
-                    Section(header: Text("info")){
-                        NavigationLink(destination: AboutView(isPresented: $isPresentedLocal)){
-                            Text("About")
-                        }
-                    }
-                }
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing){
-                        Button(action: {
-                            isPresentedLocal = false
-                        }){//どうしよう？
-                            Text("Done")
-                                .bold()
-                                .padding(5)
-                        }
+        Navigations {
+            Form{
+                SettingsList()
+                Section(header: Text("info")){
+                    NavigationLink(destination: AboutView(isPresented: $isPresentedLocal)){
+                        Text("About")
                     }
                 }
             }
-        } else {
-            NavigationView{//iOS 15用
-                Form{
-                    SettingsList()
-                    Section(header: Text("info")){
-                        NavigationLink(destination: AboutView(isPresented: $isPresentedLocal)){
-                            Text("About")
-                        }
-                    }
-                }
-                .background(Color(.systemGroupedBackground)) // なんでか真っ白になってた randomStore.init()のせい
-                .navigationTitle("Settings")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing){
-                        Button(action: {
-                            isPresentedLocal = false
-                        }){//どうしよう？
-                            Text("Done")
-                                .bold()
-                                .padding(5)
-                        }
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing){
+                    Button(action: {
+                        isPresentedLocal = false
+                    }){//どうしよう？
+                        Text("Done")
+                            .bold()
+                            .padding(5)
                     }
                 }
             }

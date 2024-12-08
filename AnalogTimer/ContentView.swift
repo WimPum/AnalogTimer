@@ -14,28 +14,8 @@ struct ContentView: View {
     @EnvironmentObject var configStore: SettingsStore
     
     //misc
-    @State private var viewSelection = 1    //ページを切り替える用
+    @AppStorage("viewSelection") private var viewSelection = 2      // Starts from where you left off
     @State private var isSettingsView: Bool = false//設定画面を開く用
-    
-    let clockConfig = ClockViewConfig( // defines every design parameter here, geometryReader scales automatically
-        secConfig:  HandConfig(knobWidth: 5,  knobLength: 210, tailLength: 30, snapCount: 60, cornerRadius: 2, divisor: 1), // Im new
-        minConfig:  HandConfig(knobWidth: 12, knobLength: 140, tailLength: 24, snapCount: 60, cornerRadius: 6, divisor: 60),
-        hourConfig: HandConfig(knobWidth: 14, knobLength: 80,  tailLength: 24, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
-        smallTicks: TickConfig(tickWidth: 2,  tickLength: 12, radius: 180, tickCount: 60, cornerRadius: 0), // 小さい方
-        largeTicks: TickConfig(tickWidth: 7,  tickLength: 12, radius: 180, tickCount: 12, cornerRadius: 0), // 目盛り
-        radialNums: RadiConfig(fontSize: 48, radius: 158, count: 12),
-        digiTimers: DigiConfig(fontSize: 35, offset: 65)
-    )
-    
-    let clockOldConfig = ClockViewConfig(
-        secConfig:  HandConfig(knobWidth: 5,  knobLength: 210, tailLength: 30, snapCount: 60, cornerRadius: 2, divisor: 1), // Im new
-        minConfig:  HandConfig(knobWidth: 12, knobLength: 140, tailLength: 24, snapCount: 60, cornerRadius: 6, divisor: 60),
-        hourConfig: HandConfig(knobWidth: 14, knobLength: 80,  tailLength: 24, snapCount: 12, cornerRadius: 7, divisor: 720), // 12 snapping point
-        smallTicks: TickConfig(tickWidth: 6,  tickLength: 12, radius: 180, tickCount: 60, cornerRadius: 3), // 小さい方
-        largeTicks: TickConfig(tickWidth: 12, tickLength: 40, radius: 180, tickCount: 12, cornerRadius: 6), // 目盛り
-        radialNums: RadiConfig(fontSize: 0, radius: 130, count: 12),
-        digiTimers: DigiConfig(fontSize: 35, offset: 65)
-    )
     
     var body: some View {
         ZStack {
@@ -45,17 +25,21 @@ struct ContentView: View {
                 GeometryReader { g in
                     DynamicStack{ // best of both worlds!! GeometryView(screensize) & DynamicStack(autorotation)
                         Spacer()
-                        ClockView(angleValue: $timerCtrl.angleValue, clockConfig: clockConfig,
+                        ClockView(angleValue: $timerCtrl.angleValue, clockConfig: configStore.clockConfig,
                                   isSnappy: true, isTimerRunning: (timerCtrl.timer != nil))
-                            .onChange(of: configStore.isAlarmEnabled){ _ in // 編集された を検知
-                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled
-                            }
                             .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
-                            .scaleEffect(min(g.size.width, g.size.height)/(clockConfig.smallTicks.radius * 2 + clockConfig.smallTicks.tickLength) * 0.9)
+                            .scaleEffect(
+                                min(g.size.width, g.size.height)
+                                / (configStore.clockConfig.smallTicks.radius * 2 + configStore.clockConfig.smallTicks.tickLength)
+                                * 0.9
+                            )
+//                            .onChange(of: configStore.isAlarmEnabled){ _ in // 編集された を検知
+//                                timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled
+//                            }
                         Button(action: {
                             if (timerCtrl.timer == nil) {
                                 timerCtrl.isAlarmEnabled = configStore.isAlarmEnabled // 更新
-                                timerCtrl.startTimer(interval: 0.01)
+                                timerCtrl.startTimer()
                             } else {
                                 timerCtrl.stopTimer()
                             }
@@ -63,8 +47,8 @@ struct ContentView: View {
                             Text((timerCtrl.timer != nil) // タイマー終了じゃない時
                                  ? "Stop Timer \(Image(systemName: "pause.fill"))"
                                  : (timerCtrl.isAlarmOn   // &アラームが鳴っているかどうか
-                                   ? "Stop Alarm \(Image(systemName: "dot.radiowaves.left.and.right"))"
-                                   : "Start Timer \(Image(systemName: "play.fill"))")  // 終了の時
+                                    ? "Stop Alarm \(Image(systemName: "dot.radiowaves.left.and.right"))"
+                                    : "Start Timer \(Image(systemName: "play.fill"))")  // 終了の時
                                  )
                                 .foregroundStyle(.white)
                                 .frame(width: 130, height: 60)
@@ -75,14 +59,14 @@ struct ContentView: View {
                                                          : (timerCtrl.isAlarmOn   // &アラームが鳴っているかどうか
                                                             ? .red
                                                             : .green)  // 終了の時
-                                                        )
+                                                         )
                                         .opacity(0.9)
                                     )
                         }.padding(30)
                         Spacer()
                     }
                 }
-//                .background(Gradient(colors: [Color.black, Color.teal]))
+//                    .background(Gradient(colors: [Color.black, Color.teal]))
                     .background(Color.black)
                     .tabItem {
                         Image(systemName: "timer")
@@ -93,26 +77,31 @@ struct ContentView: View {
                 GeometryReader { g in
                     DynamicStack{ // best of both worlds!!
                         Spacer()
-                        ClockView(angleValue: $stopwatchCtrl.angleValue, clockConfig: clockOldConfig,
-                                  isSnappy: true, isTimerRunning: true) // 操作できません(isTimerRunning)
-                            .animation((stopwatchCtrl.timer != nil) ? nil : .spring, value: stopwatchCtrl.angleValue)
+                        ClockView(angleValue: $stopwatchCtrl.angleValue, clockConfig: configStore.clockOldConfig,
+                                  isSnappy: true, isTimerRunning: true)
+                            // 頼むから.noneになったら止まってくれ
+                            .animation((stopwatchCtrl.isStopwatchActive == true) ? .none : .spring, value: stopwatchCtrl.angleValue)
                             .frame(width: min(g.size.width, g.size.height), height: min(g.size.width, g.size.height))
-                            .scaleEffect(min(g.size.width, g.size.height)/(clockOldConfig.smallTicks.radius * 2 + clockOldConfig.smallTicks.tickLength) * 0.9)
+                            .scaleEffect(
+                                min(g.size.width, g.size.height)
+                                / (configStore.clockOldConfig.smallTicks.radius * 2 + configStore.clockOldConfig.smallTicks.tickLength)
+                                * 0.9
+                            )
                         Button(action: {
-                            if (stopwatchCtrl.timer == nil) {
-                                stopwatchCtrl.startTimer(interval: 0.01)
+                            if (stopwatchCtrl.isStopwatchActive == false) {
+                                stopwatchCtrl.startTimer()
                             } else {
                                 stopwatchCtrl.stopTimer()
                             }
                         }){
-                            Text((stopwatchCtrl.timer != nil) // タイマー終了じゃない時
+                            Text((stopwatchCtrl.isStopwatchActive == true) // タイマー終了じゃない時
                                  ? "Stop \(Image(systemName: "pause.fill"))"
                                  : "Start \(Image(systemName: "play.fill"))") // 終了の時
                                 .foregroundStyle(.white)
                                 .frame(width: 130, height: 60)
                                 .background(
                                     RoundedRectangle(cornerRadius: CGFloat(12))
-                                        .foregroundStyle((stopwatchCtrl.timer != nil) ? .red : .green)
+                                        .foregroundStyle((stopwatchCtrl.isStopwatchActive == true) ? .red : .green)
                                         .opacity(0.9)
                                     )
                         }.padding(30)
@@ -125,23 +114,32 @@ struct ContentView: View {
                         Text("Stopwatch") }
                     .tag(2)
             }
-            // Upper buttons
+            // MARK: Overlay - Upper buttons
             VStack(){
                 Spacer().frame(height: 5)
                 HStack(){
-                    switch viewSelection {
-                    case 1: Text((timerCtrl.timer != nil) ? "\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())" : "Timer")
+                    switch viewSelection { // Alarmがなっても終了時刻を表示できる
+                    case 1: Text((timerCtrl.timer != nil || timerCtrl.isAlarmOn == true)
+                                 ? "\(Image(systemName: "bell.fill")) \(timerCtrl.returnEndTime())"
+                                 : "Timer")
                     case 2: Text("Stopwatch")
                     default: Text("AnalogTimer")
                     }
                     Spacer()
                     if viewSelection == 2 {
                         Button(action: {
-                            if stopwatchCtrl.timer == nil {
+                            if stopwatchCtrl.isStopwatchActive == false {
+                                stopwatchCtrl.angleValue = 219_060
+                            }
+                        }){
+                            Image(systemName: "face.smiling") // fun(resets to 10:08:30)
+                        }
+                        Button(action: {
+                            if stopwatchCtrl.isStopwatchActive == false {
                                 stopwatchCtrl.angleValue = 0
                             }
                         }){
-                            Image(systemName: "arrow.clockwise").padding(.horizontal, 12.0)
+                            Image(systemName: "arrow.clockwise").padding(.horizontal, 12)
                         }
                     }
                     Button(action: {self.isSettingsView.toggle()}){
@@ -149,7 +147,7 @@ struct ContentView: View {
                     }
                 }.padding(.horizontal, 12)
                 .fontSemiBold(size: 24)//フォントとあるがSF Symbolsだから
-                Spacer()
+                Spacer() // 全部上にあげる
             }
         }
         .preferredColorScheme(.dark)

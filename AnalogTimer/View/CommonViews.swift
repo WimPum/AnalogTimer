@@ -20,11 +20,12 @@ struct ClockHand: View {
             RoundedRectangle(cornerRadius: config.cornerRadius)
                 .fill(color)
                 .frame(width: config.knobWidth, height: config.knobLength)
-                .padding(15) // paddingがあると掴みやすい
+                .padding(20) // paddingがあると掴みやすい
                 .offset(y: -(config.knobLength / 2 + config.tailLength)) // 初期状態
             ClockTail(length: config.tailLength)
                 .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .fill(color)
+                .padding(20)
         }
         .frame(width:  (config.tailLength + config.knobLength) * 2,
                height: (config.tailLength + config.knobLength) * 2)

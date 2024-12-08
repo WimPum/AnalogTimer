@@ -9,15 +9,8 @@
 
 import SwiftUI
 
-
 struct DynamicStack<Content: View>: View {
-//    // 横画面検出(横にしたら縦の大きさ(Vertical)はみんな .compact)
-//    @Environment(\.verticalSizeClass) private var vSizeClass
-//
-//    // なんでかみんなHorizontalを使うけどできるの？？ randomizerでも使えなかった
-//    @Environment(\.horizontalSizeClass) private var hSizeClass
     var spacing: CGFloat?
-    
     @ViewBuilder var content: () -> Content // ????????????
     
     var body: some View {
