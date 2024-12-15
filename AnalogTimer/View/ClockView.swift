@@ -8,13 +8,14 @@
 import SwiftUI
 
 // ClockView
-// 下にsmallなDigitalTimerを追加
+// 変わるのはvar(isTimerRunningとangleValueのみ　全部再描画されないようにする
 struct ClockView: View{
     // Global settings
     @EnvironmentObject var configStore: SettingsStore
     
     // values
-    @Binding var angleValue: CGFloat     // 角度の値 360°を超えていく 1秒は6° つまりangleValue/6=seconds
+    // angleValueは角度の値 360°を超えることができる 1秒は6° つまりangleValue/6=seconds
+    @Binding var angleValue: CGFloat // ClockView内で変更できるからBinding
     @State private var previousAngle: CGFloat? = 0.0    // ドラッグ開始時の角度を保持する すごいやつ
     @State private var isSecDragging: Bool = false
     @State private var isMinDragging: Bool = false
@@ -24,7 +25,7 @@ struct ClockView: View{
     let clockConfig: ClockViewConfig
     
     // settings
-    var isSnappy: Bool          // スナップ有無
+    let isSnappy: Bool          // スナップ有無 immutable
     var isTimerRunning: Bool
 
     var body: some View{
@@ -35,7 +36,8 @@ struct ClockView: View{
             RadialNumber(config: clockConfig.radialNums)
             
             // 秒針
-            SecondHand(angleValue: $angleValue, color: .orange, config: clockConfig.secConfig)
+            SecondHand(color: .orange, config: clockConfig.secConfig)
+                .rotationEffect(Angle.degrees(angleValue/clockConfig.secConfig.divisor)) // 回転を遅くする なんでここにrotationEffect？
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -62,7 +64,8 @@ struct ClockView: View{
                 )
             
             // 分針
-            ClockHand(angleValue: $angleValue, color: .white, config: clockConfig.minConfig)
+            ClockHand(color: .white, config: clockConfig.minConfig)
+                .rotationEffect(Angle.degrees(angleValue/clockConfig.minConfig.divisor))
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in
@@ -89,7 +92,8 @@ struct ClockView: View{
                 )
             
             // 短針
-            ClockHand(angleValue: $angleValue, color: .white, config: clockConfig.hourConfig)
+            ClockHand(color: .white, config: clockConfig.hourConfig)
+                .rotationEffect(Angle.degrees(angleValue/clockConfig.hourConfig.divisor))
                 .gesture(
                     DragGesture(minimumDistance: 0.1)
                         .onChanged({value in

@@ -10,8 +10,6 @@ import SwiftUI
 final class SettingsStore: ObservableObject{
     @AppStorage("isHapticsOn") var isHapticsOn: Bool = true
     @AppStorage("isAlarmEnabled") var isAlarmEnabled: Bool = true // Alarm？？
-    // 色リスト
-    // ColorCombo(name: "Default",     gradColor: [Color.black, Color.gray],    handColor: [Color.orange, Color.green]),
     
     // ここに複数の時計デザインを入れる
     
@@ -35,15 +33,8 @@ final class SettingsStore: ObservableObject{
         digiTimers: DigiConfig(fontSize: 35, offset: 65)
     )
     
-    
     func resetSettings() {
         isHapticsOn = true
         isAlarmEnabled = true
     }
-}
-
-struct ColorCombo{
-    var name: String
-    var gradColor: [Color]?
-    var handColor: [Color]? // sec, minの順
 }

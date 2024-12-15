@@ -9,15 +9,18 @@ import SwiftUI
 
 @main
 struct AnalogTimerApp: App {
-    @StateObject var timers = TimerLogic()
-    @StateObject var stopws = StopwatchLogic()
-    @StateObject var config = SettingsStore()
+    // persistent
+    @StateObject private var timers = TimerLogic()
+    @StateObject private var stopws = StopwatchLogic() // onchangeとかdidSetで関数実行をできるはず
+    @StateObject private var config = SettingsStore()
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(timers)
-                .environmentObject(stopws)
-                .environmentObject(config)
+            ContentView(
+                // Timer bindings 今度はクラスごと渡す方式に戻すつもり
+                timer: timers,
+                stopwatch: stopws
+            )
+                .environmentObject(config) // １秒に何回も更新しないから残す
         }
     }
 }

@@ -42,62 +42,6 @@ extension View {
             .font(.system(size: size, weight: .semibold, design: .default))
             .foregroundColor(.white)
     }
-    
-    // ロール中に半透明(ロール中です！！という効果) 選んだ番号の表示用
-    func fontSemiBoldRound(size: CGFloat, rolling: Bool) -> some View {
-        if rolling == true{
-            return self
-                .font(.system(size: size, weight: .semibold, design: .rounded))
-                .foregroundColor(.white)
-                .opacity(0.4)
-        }else{
-            return self
-                .font(.system(size: size, weight: .semibold, design: .rounded))
-                .foregroundColor(.white)
-                .opacity(1)
-            }
-    }
-    
-    func fontMessage(opacity: CGFloat) -> some View{
-        self
-            .fontSemiBold(size: 26)
-            .multilineTextAlignment(.center)
-            .opacity(opacity)
-            .frame(height: 60)
-            .padding(.horizontal, 20)
-            .minimumScaleFactor(0.2)
-    }
-    
-    func glassMaterial(cornerRadius: Int) -> some View {
-        self.background(
-            RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                .foregroundStyle(.ultraThinMaterial)
-                .shadow(color: .init(white: 0.4, opacity: 0.6), radius: 5, x: 0, y: 0)
-        )
-    }
-    
-    func glassIconMaterial(cornerRadius: Int) -> some View {
-        self.background(
-            RoundedRectangle(cornerRadius: CGFloat(cornerRadius))
-                .foregroundStyle(.thinMaterial)
-                .shadow(color: .init(white: 0.4, opacity: 0.6), radius: 5, x: 0, y: 0)
-        )
-    }
-    
-    func glassButton() -> some View {
-        self
-            .fontSemiBold(size: 22)
-            .padding()
-            .frame(width:135, height: 55)
-            .glassMaterial(cornerRadius: 12)
-    }
-    
-    // TextFieldにした線を引くのに使います
-    func setUnderline() -> some View {
-        self
-            .overlay(Rectangle().frame(height: 2).padding(.top, 35))
-            .foregroundColor(.white)
-    }
 }
 
 // HEX(#FFFFFF)から色を指定する Stringで指定
@@ -120,17 +64,4 @@ extension Color { // from https://blog.ottijp.com/2023/12/17/swift-hex-color/
             return nil
         }
     }
-}
-
-extension UIWindow {
-    // シェイクを検知
-    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        super.motionEnded(motion, with: event)
-        NotificationCenter.default.post(name: .deviceDidShakeNotification, object: event)
-    }
-}
-
-extension NSNotification.Name {
-    // シェイクの時の通知の名前
-    public static let deviceDidShakeNotification = NSNotification.Name("DeviceDidShakeNotification")
 }

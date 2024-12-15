@@ -8,12 +8,22 @@
 import SwiftUI
 import Combine
 
-// MARK: StopwatchLogic
+// inspiration: https://medium.com/@wesleymatlock/optimizing-swiftui-reducing-body-recalculation-and-minimizing-state-updates-8f7944253725
+
+// MARK: - StopwatchLogic
 class StopwatchLogic: ObservableObject{
     // timer
     @Published var angleValue: CGFloat = 0.0
     @AppStorage("startAngle") private var startAngle: Double = 0.0 // 開始時の角度(startTimeより前の情報)
-    @AppStorage("isStopwatchActive") var isStopwatchActive: Bool = false // 再起動の際にStopwatchを復帰
+    @AppStorage("isStopwatchActive") var isStopwatchActive: Bool = false{ // 再起動の際にStopwatchを復帰
+        didSet{
+            if isStopwatchActive == true{ // Instructed to Start NOW
+                startTimer()
+            } else { // stopwatchだから単純
+                stopTimer()
+            }
+        }
+    }
     
     // Date
     private var startTime: Date = Date() // init
@@ -43,30 +53,19 @@ class StopwatchLogic: ObservableObject{
         startTime = Date()
         startAngle = angleValue
         startTimeInterval = startTime.timeIntervalSince1970 // save
-        isStopwatchActive = true // timer running now!
         
         // prepare CADisplayLink
         previousTimestamp = CACurrentMediaTime()
         displayLink = CADisplayLink(target: self, selector: #selector(update(_:)))
+        displayLink?.preferredFrameRateRange = .init(minimum: 15, maximum: 60, preferred: 60) // 60FPS capp
         displayLink?.add(to: .main, forMode: .common)
         
         print("STOPWATCH: Started ▶️")
-        
-        // タイマー宣言
-//        timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
-//            .autoconnect()
-//            .prepend(Date())
-//            .sink { [weak self] _ in
-//                // MARK: Issue2
-//                guard let self else { return }
-//                self.angleValue = self.startAngle - (self.startTime.timeIntervalSinceNow) * 6
-//            }
     }
     
     // 毎フレームごとに呼ばれる
     @objc private func update(_ displayLink: CADisplayLink) {
         let delta = displayLink.targetTimestamp - previousTimestamp
-//        self.angleValue = self.startAngle - (self.startTime.timeIntervalSinceNow) * 6 // sync
         let newValue = angleValue + delta * 6
         if newValue.truncatingRemainder(dividingBy: 6) == 0 {
             angleValue = startAngle - startTime.timeIntervalSinceNow * 6 // sync
@@ -79,7 +78,6 @@ class StopwatchLogic: ObservableObject{
     func stopTimer() { // タイマー止めます
         print("STOPWATCH: Stopped ⏸️")
         displayLink?.invalidate()
-        isStopwatchActive = false // stw cancelled
         displayLink = nil
     }
 }

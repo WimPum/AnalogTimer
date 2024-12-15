@@ -10,10 +10,8 @@ import SwiftUI
 //MARK: Views
 
 // ここでやることは最低限にする
-// angleValueは外から変更できるようにBindingにしてある
 struct ClockHand: View {
-    @Binding var angleValue: CGFloat    // 今の角度
-    var color: Color
+    let color: Color
     let config: HandConfig
     var body: some View {
         ZStack{
@@ -29,13 +27,11 @@ struct ClockHand: View {
         }
         .frame(width:  (config.tailLength + config.knobLength) * 2,
                height: (config.tailLength + config.knobLength) * 2)
-        .rotationEffect(Angle.degrees(angleValue/config.divisor)) // 回転を遅くする なんでここにrotationEffect？
     }
 }
 
 struct SecondHand: View { // 秒針 (中古ではない)
-    @Binding var angleValue: CGFloat    // 今の角度
-    var color: Color
+    let color: Color
     let config: HandConfig
     var body: some View {
         ZStack{
@@ -47,7 +43,6 @@ struct SecondHand: View { // 秒針 (中古ではない)
         }
         .frame(width:  (config.knobLength - config.tailLength) * 2,
                height: (config.knobLength - config.tailLength) * 2)
-        .rotationEffect(Angle.degrees(angleValue/config.divisor))
     }
 }
 
@@ -125,7 +120,7 @@ struct RadialNumber: View {
 
 struct DigitalTimer: View, Animatable {
     let config: DigiConfig
-    var angleValue: CGFloat
+    var angleValue: CGFloat // なぜBindingじゃないか＞＞＞＞？
     
     // Animation
     var animatableData: CGFloat{
@@ -140,6 +135,8 @@ struct DigitalTimer: View, Animatable {
             .offset(x: 0, y: config.offset) // 時計の中心からの距離
     }
 }
+
+// 全てimmutable
 
 struct HandConfig { // 位置とか設定
     let knobWidth:  CGFloat  // 幅
@@ -169,12 +166,12 @@ struct DigiConfig {
     let offset: CGFloat
 }
 
-#Preview {
-//    let tickConfig = TickConfig(tickWidth: 12, tickLength: 34, radius: 161, tickCount: 12, cornerRadius: 16)
-//    ClockTicks(config: tickConfig)
-//        .border(.red, width: 5)
-//    RadialNumber(config: RadiConfig(fontSize: 40, radius: 161, count: 12))
-    @StateObject var timers = TimerLogic()
-    let secConfig = HandConfig(knobWidth: 6,  knobLength: 210, tailLength: 30, snapCount: 60, cornerRadius: 3, divisor: 1)
-    SecondHand(angleValue: $timers.angleValue, color: .red, config: secConfig)
-}
+//#Preview {
+////    let tickConfig = TickConfig(tickWidth: 12, tickLength: 34, radius: 161, tickCount: 12, cornerRadius: 16)
+////    ClockTicks(config: tickConfig)
+////        .border(.red, width: 5)
+////    RadialNumber(config: RadiConfig(fontSize: 40, radius: 161, count: 12))
+//    @StateObject var timers = TimerLogic()
+//    let secConfig = HandConfig(knobWidth: 6,  knobLength: 210, tailLength: 30, snapCount: 60, cornerRadius: 3, divisor: 1)
+//    SecondHand(angleValue: timers.angleValue, color: .red, config: secConfig)
+//}

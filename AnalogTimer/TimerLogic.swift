@@ -18,21 +18,29 @@ import UserNotifications
 // MARK: TimerLogic
 final class TimerLogic: ObservableObject{
     // timer
-    @Published var timer: AnyCancellable? // 実際のタイマー
     @Published var angleValue: CGFloat = 0.0 // 残り時間は全てこれで管理
-    @AppStorage("isTimerActive") private var isTimerActive: Bool = false // タイマーは初めは存在しない
-    let interval = 0.1 // theres not enough precision
+    @AppStorage("isTimerActive") var isTimerActive: Bool = false{ // タイマーは初めは存在しない
+        didSet{
+            if isTimerActive == true{ // Instructed to Start NOW
+                startTimer()
+            } else { // stopwatchだから単純
+                stopTimer()
+            }
+        }
+    }
     
     // Date
     private var startTime: Date = Date()
     private var endTime: Date = Date()
     @AppStorage("endTimeInterval") private var endTimeInterval: Double = 0.0 // ここから復活
     
+    // CADisplayLink
+    private var displayLink: CADisplayLink?
+    private var previousTimestamp: CFTimeInterval = .zero
+    
     // sound
-    @Published var isAlarmEnabled: Bool = true // config
-    private var player: AVAudioPlayer!
-    private let alarmSound = NSDataAsset(name: "Alarm")! // 音はWaves Flow Motionで作りました
-    var isAlarmOn: Bool = false{
+    var isAlarmEnabled: Bool = true // config
+    @Published var isAlarmOn: Bool = false{
         didSet{
             if isAlarmOn { // 終了したら
                 playAudio()
@@ -42,6 +50,9 @@ final class TimerLogic: ObservableObject{
             }
         }
     }
+    private var player: AVAudioPlayer!
+    private let alarmSound = NSDataAsset(name: "Alarm")! // 音はWaves Flow Motionで作りました
+
     
     init(){
         print("Hey its me TIMER!!")
@@ -61,14 +72,14 @@ final class TimerLogic: ObservableObject{
     // MARK: Timer
     func startTimer() { // limitはminuteで設定する
         // always stop alarm when startTimer was called
+        // 呼び出し時の処理
         isAlarmOn = false
         removeNotification()
-        print("TIMER: Started ▶️")
-        
-        // 呼び出し時の処理
-        if let _timer = timer{ // もし開始時にタイマーが存在したら消す
-            _timer.cancel()
-        } else if self.angleValue <= 0{ // 開始時に残り時間0だったら
+        if let _displayLink = displayLink{ // もし開始時にタイマーが存在したら消す
+            _displayLink.invalidate()
+        }
+        if self.angleValue <= 0{ // 開始時に残り時間0だったら
+            isTimerActive = false
             return
         }
         
@@ -77,34 +88,40 @@ final class TimerLogic: ObservableObject{
         endTime = startTime.addingTimeInterval(angleValue/6)
         endTimeInterval = endTime.timeIntervalSince1970 // 1970/1/1 を基準に
         sendNotification() // schedules notification
-        isTimerActive = true // timer running now!
         
-        // タイマー宣言
-        timer = Timer.publish(every: interval, on: .main, in: .common)// intervalの間隔でthread=main
-            .autoconnect()
-//            .prepend(Date())
-            .sink { [weak self] _ in
-                // MARK: Issue1
-                guard let self else { return }
-                self.angleValue = (self.endTime.timeIntervalSinceNow) * 6 // "interval" second late
-                
-                if self.angleValue < 0 { // タイマー終了
-                    self.angleValue = 0 // clippit!!
-                    if self.isAlarmEnabled == true{
-                        self.isAlarmOn = true // ここで鳴ります
-                    }
-                    self.stopTimer()
-                }
+        // prepare CADisplayLink
+        previousTimestamp = CACurrentMediaTime()
+        displayLink = CADisplayLink(target: self, selector: #selector(update(_:)))
+        displayLink?.preferredFrameRateRange = .init(minimum: 15, maximum: 60, preferred: 60) // 60FPS capp
+        displayLink?.add(to: .main, forMode: .common)
+
+        print("TIMER: Started ▶️")
+    }
+    
+    // 毎フレームごとに呼ばれる
+    @objc private func update(_ displayLink: CADisplayLink) {
+        let delta = displayLink.targetTimestamp - previousTimestamp
+        let newValue = angleValue - delta * 6
+        if newValue.truncatingRemainder(dividingBy: 6) == 0 {
+            angleValue = (endTime.timeIntervalSinceNow) * 6 // "interval" second late// sync
+        } else {
+            angleValue = newValue
+        }
+        if self.angleValue < 0 { // タイマー終了
+            self.angleValue = 0 // clippit!!
+            if self.isAlarmEnabled == true{
+                self.isAlarmOn = true // ここで鳴ります
             }
+            isTimerActive = false
+        }
+        previousTimestamp = displayLink.targetTimestamp
     }
 
     func stopTimer() { // タイマー止めます
         print("TIMER: Stopped ⏸️")
-        timer?.cancel()
+        displayLink?.invalidate()
+        displayLink = nil
         removeNotification()
-//        self.angleValue = self.endTime.timeIntervalSinceNow * 6 // 多分これが重たい
-        isTimerActive = false // timer cancelled
-        timer = nil
     }
     
     // MARK: Audio
