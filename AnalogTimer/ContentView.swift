@@ -61,9 +61,6 @@ struct ContentView: View {
                                                          )
                                         .opacity(0.9)
                                     )
-//                                .onChange(of: timer.isAlarmOn) { _ in
-//                                    print("FICKYOOU")
-//                                }
                         }.padding(30)
                         Spacer()
                     }
